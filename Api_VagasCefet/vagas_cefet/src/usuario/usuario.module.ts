@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 
 import { UsuarioController } from "./usuario.controller";
-import { UsuarioRepository } from "./usuario.repository";
+//import { UsuarioRepository } from "./usuario.repository";
 import { EmailEhUnicoValidator } from "./validacao/emailUnico.validator";
 import { UsuarioService } from "./usuario.service";
 import { UsuarioEntity } from "./usuario.entity";
@@ -13,9 +13,9 @@ import { UsuarioEntity } from "./usuario.entity";
     controllers: [UsuarioController],
     providers:[
         UsuarioService,
-        UsuarioRepository, 
-        EmailEhUnicoValidator
-    ] // adicionando o provider de Validação de email
+//        UsuarioRepository, 
+        EmailEhUnicoValidator // adicionando o provider de Validação de email
+    ] 
 })
 
 export class UsuarioModule {}

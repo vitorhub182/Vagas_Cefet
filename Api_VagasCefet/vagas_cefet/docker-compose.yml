@@ -11,21 +11,22 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres:/data/postgres
 #    networks:
 #      - postgres
 #    restart: unless-stopped
 
-
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${DB_ADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "8082:80"
-    depends_on:
-      - postgres
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    restart: no
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${DB_ADMIN_EMAIL}
+#      PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
+#    ports:
+#      - "8082:80"
+#    depends_on:
+#      - postgres
 #    networks:
 #      - postgres
    

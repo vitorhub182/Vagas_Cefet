@@ -1,6 +1,9 @@
+
+\c banco_vagas;
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-  CREATE  TABLE  IF  NOT  EXISTS  public.usuarios
+  CREATE  TABLE  IF  NOT  EXISTS  usuarios
   (
   id uuid NOT NULL  DEFAULT uuid_generate_v4(),
   nome character varying(100) COLLATE pg_catalog."default"  NOT NULL,
