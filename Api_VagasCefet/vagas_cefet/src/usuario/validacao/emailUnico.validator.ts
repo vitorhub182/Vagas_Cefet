@@ -16,8 +16,6 @@ export class EmailEhUnicoValidator implements ValidatorConstraintInterface{ // i
 
 }
 
-
-
 // Cria o decorator que sera utilizado como validador assíncrono 
 export const EmailEhUnico = (opcoesDeValidacao: ValidationOptions) => {
     return (objeto: Object, propriedade: string) => {

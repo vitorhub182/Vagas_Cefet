@@ -4,7 +4,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
 
 
 @Injectable()
-export class PostresConfigService  implements TypeOrmOptionsFactory{
+export class PostgresConfigService  implements TypeOrmOptionsFactory{
     constructor(private configService: ConfigService){}
     createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
@@ -18,5 +18,4 @@ export class PostresConfigService  implements TypeOrmOptionsFactory{
             synchronize:    true
         }
     }
-
 }

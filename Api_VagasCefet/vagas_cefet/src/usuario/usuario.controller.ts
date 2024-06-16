@@ -1,18 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
-//import { UsuarioRepository } from "./usuario.repository";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { CriaUsuarioDTO } from "./dto/CriaUsuario.dto";
 import { UsuarioEntity } from "./usuario.entity";
 import { ListaUsuarioDTO } from "./dto/ListaUsuario.dto";
 import { AtualizaUsuarioDTO } from "./dto/AtualizaUsuario.dto";
 import { UsuarioService } from "./usuario.service";
+import { AuthGuard } from "src/auth/auth.guard";
 
 @Controller('/usuarios')
+@UseGuards(AuthGuard)
 export class UsuarioController{
     
     constructor(
         private usuarioService: UsuarioService
     ) {}
 
+
+    
     @Post()
     async criaUsuario(@Body() dadosDoUsuario: CriaUsuarioDTO) {
 

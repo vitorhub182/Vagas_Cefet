@@ -1,6 +1,7 @@
 import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn} from 'typeorm'
 
 
+
 @Entity({name: 'usuarios'})
 export class UsuarioEntity {
 
