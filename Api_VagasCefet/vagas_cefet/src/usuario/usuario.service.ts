@@ -40,14 +40,11 @@ export class UsuarioService{
     async listaUsuarios(){
 
         try{
-            const usuariosSalvos = await this.usuarioRepository.find();
+            const listaDeUsuarios = await this.usuarioRepository.find();
             
             //const teste = await this.usuarioRepository.createQueryBuilder('usuarios').select(['usuarios.id']).getMany();
-            
-            const usuariosLista = usuariosSalvos.map(
-                usuario => new ListaUsuarioDTO(usuario)
-            )
-            return usuariosLista;
+            return listaDeUsuarios;
+
         } catch (error) {
             if (error instanceof NotFoundException) {
               throw error;
@@ -79,10 +76,8 @@ export class UsuarioService{
             dadosUsuario.senha = `${ivBase64}:${encryptedBase64}`; 
 
             const usuarioSalvo = await this.usuarioRepository.save(dadosUsuario);
-            
-            const usuarioSalvoDTO = new DescricaoUsuarioDTO(usuarioSalvo)
-    
-            return usuarioSalvoDTO;
+         
+            return usuarioSalvo;
 
         } catch (error) {
             if (error instanceof NotFoundException) {

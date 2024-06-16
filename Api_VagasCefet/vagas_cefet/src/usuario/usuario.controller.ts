@@ -1,6 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { CriaUsuarioDTO } from "./dto/CriaUsuario.dto";
-import { UsuarioEntity } from "./usuario.entity";
 import { ListaUsuarioDTO } from "./dto/ListaUsuario.dto";
 import { AtualizaUsuarioDTO } from "./dto/AtualizaUsuario.dto";
 import { UsuarioService } from "./usuario.service";
@@ -9,9 +8,11 @@ import { Roles } from "src/decorators/roles.decorator";
 import { Role } from "src/enums/role.enum";
 import { RolesGuard } from "src/auth/roles.guard";
 import { DescricaoUsuarioDTO } from "./dto/DescricaoUsuario.dto";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags('usuarios')
+@ApiBearerAuth()
 @Controller('/usuarios')
-
 export class UsuarioController{
     
     constructor(
@@ -19,11 +20,15 @@ export class UsuarioController{
     ) {}
 
     @Post()
+    @ApiOperation({ summary: 'Cria um novo usuário' })
+    @ApiBody({ type: CriaUsuarioDTO })
+    @ApiResponse({ status: 201, description: 'Usuário criado com sucesso.', type: DescricaoUsuarioDTO })
     async criaUsuario(@Body() dadosDoUsuario: CriaUsuarioDTO) {
    
         const usuarioSalvo = await this.usuarioService.salvar(dadosDoUsuario);
+        
         return {
-            usuario: usuarioSalvo,
+            usuario: new DescricaoUsuarioDTO(usuarioSalvo),
             message: "Usuario salvo com sucesso!"
         }
     }
@@ -31,39 +36,62 @@ export class UsuarioController{
     @Get()
     @UseGuards(AuthGuard)
     @Roles(Role.Professor)
+    @ApiOperation({ summary: 'Lista todos os usuários' })
+    @ApiResponse({ status: 200, description: 'Lista de usuários encontrada.', type: [ListaUsuarioDTO] })
     async listaUsuarios(){
         const usuariosLista = await this.usuarioService.listaUsuarios();
-        return usuariosLista;
+        
+        const listaDeUsuarios = usuariosLista.map(
+            usuario => new ListaUsuarioDTO(usuario)
+        )
+
+        return {
+            listaDeUsuarios : listaDeUsuarios,
+            message: 'Usuarios listados com Sucesso!'
+        }
     }
 
     @Get('/:id')
     @UseGuards(AuthGuard)
     @Roles(Role.Professor, Role.Aluno)
+    @ApiOperation({ summary: 'Busca um usuário pelo ID' })
+    @ApiParam({ name: 'id', description: 'ID do usuário a ser buscado' })
+    @ApiResponse({ status: 200, description: 'Usuário encontrado.', type: DescricaoUsuarioDTO })
     async buscaPorId(@Param('id') id: string){
         const usuario = await this.usuarioService.buscaPorId(id);
         
-        return {usuario: new DescricaoUsuarioDTO(usuario)};
+        return {
+            usuario: new DescricaoUsuarioDTO(usuario),
+            message: 'Usuario apresentado com Sucesso!'
+        };
     }
 
     @Patch('/:id')
     @UseGuards(AuthGuard, RolesGuard)
     @Roles(Role.Professor,Role.Aluno)
+    @ApiOperation({ summary: 'Atualiza um usuário pelo ID' })
+    @ApiParam({ name: 'id', description: 'ID do usuário a ser atualizado' })
+    @ApiBody({ type: AtualizaUsuarioDTO })
+    @ApiResponse({ status: 200, description: 'Usuário atualizado com sucesso.', type: DescricaoUsuarioDTO })
     async atualizaUsuario( @Param('id') id: string, @Body() novosDados: AtualizaUsuarioDTO){
         const usuarioAtualizado = await this.usuarioService.atualiza(id,novosDados);
         return {
-            usuario: new ListaUsuarioDTO(usuarioAtualizado),
-            message: 'Usuario atualizado com Sucesso'
+            usuario: new DescricaoUsuarioDTO(usuarioAtualizado),
+            message: 'Usuario atualizado com Sucesso!'
         }
     }
 
     @Delete('/:id')
     @UseGuards(AuthGuard,RolesGuard)
     @Roles(Role.Professor,Role.Aluno)
+    @ApiOperation({ summary: 'Remove um usuário pelo ID' })
+    @ApiParam({ name: 'id', description: 'ID do usuário a ser removido' })
+    @ApiResponse({ status: 200, description: 'Usuário removido com sucesso.', type: DescricaoUsuarioDTO })
     async removeUsuario(@Param('id') id: string){
         const usuarioRemovido = await this.usuarioService.remover(id);
         return{
-            usuario: new ListaUsuarioDTO(usuarioRemovido),
-            message: 'Usuario Removido com Sucesso'
+            usuario: new DescricaoUsuarioDTO(usuarioRemovido),
+            message: 'Usuario Removido com Sucesso!'
         }
     }
 }
