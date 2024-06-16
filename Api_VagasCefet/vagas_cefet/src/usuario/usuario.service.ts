@@ -1,13 +1,11 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ListaUsuarioDTO } from "./dto/ListaUsuario.dto";
 import { UsuarioEntity } from "./usuario.entity";
 import { Repository } from "typeorm";
 import { createCipheriv, randomBytes, scrypt } from 'crypto';
 import { promisify } from 'util';
 import { ConfigService } from "@nestjs/config";
 import { CriaUsuarioDTO } from "./dto/CriaUsuario.dto";
-import { DescricaoUsuarioDTO } from "./dto/DescricaoUsuario.dto";
 
 @Injectable()
 export class UsuarioService{
@@ -42,7 +40,8 @@ export class UsuarioService{
         try{
             const listaDeUsuarios = await this.usuarioRepository.find();
             
-            //const teste = await this.usuarioRepository.createQueryBuilder('usuarios').select(['usuarios.id']).getMany();
+            //const teste = await this.usuarioRepository.createQueryBuilder('usuarios').select(['usuarios.id']).getMany();*/
+
             return listaDeUsuarios;
 
         } catch (error) {
@@ -133,7 +132,7 @@ export class UsuarioService{
     
     async findOne(emailFornecido: string): Promise<UsuarioEntity | undefined> {
         try {
-            return this.usuarioRepository.findOne({
+            return await this.usuarioRepository.findOne({
                 where: { email: emailFornecido}
             });
         } catch (error) {
