@@ -12,6 +12,8 @@ export class UsuarioEntity {
     @Column({name: 'nome', length: 100, nullable: false})
     nome: string;
 
+    @Column({name: 'role', length: 10, nullable: false})
+    role: string;
     
     @Column({name: 'email', length: 70, nullable: false})
     email: string;
@@ -27,4 +29,6 @@ export class UsuarioEntity {
 
     @DeleteDateColumn({name: 'deleted_at'})
     deletedAt: string;
+
+    
 }

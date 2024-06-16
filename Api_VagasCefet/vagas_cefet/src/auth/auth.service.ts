@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { createDecipheriv, scrypt } from 'crypto';
 import { promisify } from 'util';
 import { ConfigService } from '@nestjs/config';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,8 @@ export class AuthService {
         private jwtService: JwtService,
         @InjectRepository(UsuarioEntity) // alinhar repository ao entity
         private readonly usuarioRepository: Repository<UsuarioEntity>,
-        private configService: ConfigService
+        private configService: ConfigService,
+        private reflector: Reflector,
         ) {}
 
   async signIn(emailFornecido: string, pass: string): Promise<{ access_token: string }> {
@@ -32,9 +34,7 @@ export class AuthService {
           throw new UnauthorizedException();
         }
         const payload = { sub: user.id, emailFornecido: user.email };
-        return {
-            access_token: await this.jwtService.signAsync(payload),
-          };
+        return { access_token: await this.jwtService.signAsync(payload),};
   }
   
   private async decryptText(encryptedString: string, senha: string) {

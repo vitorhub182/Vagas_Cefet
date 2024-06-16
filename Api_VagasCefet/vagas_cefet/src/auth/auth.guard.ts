@@ -5,14 +5,21 @@ import {
     UnauthorizedException,
   } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Reflector } from '@nestjs/core';
   import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
   import { Request } from 'express';
+import { UsuarioEntity } from 'src/usuario/usuario.entity';
+import { Repository } from 'typeorm';
   
   @Injectable()
   export class AuthGuard implements CanActivate {
     constructor(
         private jwtService: JwtService,
-        private configService: ConfigService
+        private configService: ConfigService,
+        @InjectRepository(UsuarioEntity) // alinhar repository ao entity
+        private readonly usuarioRepository: Repository<UsuarioEntity>,
+        private reflector: Reflector,
     ) {}
   
     async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -28,15 +35,25 @@ import { ConfigService } from '@nestjs/config';
             secret: this.configService.get<string>('SECRET')
           }
         );
-        // 💡 We're assigning the payload to the request object here
-        // so that we can access it in our route handlers
         request['user'] = payload;
+
+        const emailJWT = payload.emailFornecido;
+
+      if (!emailJWT){throw new UnauthorizedException();}
+    const user  = await this.usuarioRepository.findOne({where: { email: emailJWT}});
+    const roles  = this.reflector.get<string[]>('roles', context.getHandler());
+    const total_roles = roles.filter(role => role === user.role);
+    if(total_roles.length >=1){
+      return true;
+    }
       } catch {
         throw new UnauthorizedException();
       }
+      //const token = context.getArgs()[0].headers.authentication.split(' ')[1];
+      
       return true;
     }
-  
+ 
     private extractTokenFromHeader(request: Request): string | undefined {
       const [type, token] = request.headers.authorization?.split(' ') ?? [];
       return type === 'Bearer' ? token : undefined;

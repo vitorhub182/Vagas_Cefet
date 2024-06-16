@@ -1,1 +1,2 @@
 endpoint: DELETE /usuarios/123123 --> invalid input syntax for type uuid: "1212" ====> Tratar exceção
+verificar se deletar somente é permitido para o proprio usuario

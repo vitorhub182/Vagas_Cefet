@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 import { EmailEhUnico } from "../validacao/emailUnico.validator";
+import { ValidRole } from "../validacao/tipoRole.validator";
 
 export class AtualizaUsuarioDTO {
     
@@ -15,4 +16,8 @@ export class AtualizaUsuarioDTO {
     @MinLength(6, {message: "A SENHA precisa ter pelo menos 6 caracteres"})
     @IsOptional()
     senha: string;
+
+    @ValidRole({message: "Tipo inválido, somente: professor ou aluno"})
+    @IsOptional()
+    role: string;
 }

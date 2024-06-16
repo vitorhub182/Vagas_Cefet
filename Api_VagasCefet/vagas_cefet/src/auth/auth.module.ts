@@ -5,6 +5,7 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { RolesGuard } from './roles.guard';
 
 @Module({
   imports: [
@@ -22,10 +23,12 @@ import { AuthService } from './auth.service';
   providers: [
     AuthService,
     AuthGuard,
+    RolesGuard
   ],
   exports: [
     AuthService,
-    AuthGuard
+    AuthGuard,
+    RolesGuard
   ],
 })
 export class AuthModule {
