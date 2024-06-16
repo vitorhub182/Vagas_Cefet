@@ -7,6 +7,7 @@ import { createCipheriv, randomBytes, scrypt } from 'crypto';
 import { promisify } from 'util';
 import { ConfigService } from "@nestjs/config";
 import { CriaUsuarioDTO } from "./dto/CriaUsuario.dto";
+import { DescricaoUsuarioDTO } from "./dto/DescricaoUsuario.dto";
 
 @Injectable()
 export class UsuarioService{
@@ -44,7 +45,7 @@ export class UsuarioService{
             //const teste = await this.usuarioRepository.createQueryBuilder('usuarios').select(['usuarios.id']).getMany();
             
             const usuariosLista = usuariosSalvos.map(
-                usuario => new ListaUsuarioDTO(usuario.id,usuario.nome,usuario.role) 
+                usuario => new ListaUsuarioDTO(usuario)
             )
             return usuariosLista;
         } catch (error) {
@@ -60,10 +61,14 @@ export class UsuarioService{
         try{
             const usuarioEntity = new UsuarioEntity();
             usuarioEntity.email = dadosUsuario.email;
-            usuarioEntity.nome = dadosUsuario.nome;
+            usuarioEntity.nome_completo = dadosUsuario.nome_completo;
             usuarioEntity.senha = dadosUsuario.senha;
             usuarioEntity.role = dadosUsuario.role;
-
+            usuarioEntity.apelido = dadosUsuario.apelido;
+            usuarioEntity.resumo = dadosUsuario.resumo;
+            usuarioEntity.formacao = dadosUsuario.formacao;
+            usuarioEntity.exp_profissional = dadosUsuario.exp_profissional;
+            
             const password = this.configService.get<string>('ENCRIPT');
             const iv = randomBytes(16);
             const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer;
@@ -74,7 +79,10 @@ export class UsuarioService{
             dadosUsuario.senha = `${ivBase64}:${encryptedBase64}`; 
 
             const usuarioSalvo = await this.usuarioRepository.save(dadosUsuario);
-            return usuarioSalvo;
+            
+            const usuarioSalvoDTO = new DescricaoUsuarioDTO(usuarioSalvo)
+    
+            return usuarioSalvoDTO;
 
         } catch (error) {
             if (error instanceof NotFoundException) {
@@ -103,11 +111,7 @@ export class UsuarioService{
         try {
             await  this.buscaPorId(id);
 
-            await this.usuarioRepository.update(id, { 
-                nome: dadosDeAtualizacao.nome,
-                email: dadosDeAtualizacao.email,
-                senha: dadosDeAtualizacao.senha
-             });
+            await this.usuarioRepository.update(id, dadosDeAtualizacao);
             return this.buscaPorId(id);
         } catch (error) {
             if (error instanceof NotFoundException) {

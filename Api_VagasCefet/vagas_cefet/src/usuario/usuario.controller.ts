@@ -8,6 +8,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { Roles } from "src/decorators/roles.decorator";
 import { Role } from "src/enums/role.enum";
 import { RolesGuard } from "src/auth/roles.guard";
+import { DescricaoUsuarioDTO } from "./dto/DescricaoUsuario.dto";
 
 @Controller('/usuarios')
 
@@ -21,8 +22,10 @@ export class UsuarioController{
     async criaUsuario(@Body() dadosDoUsuario: CriaUsuarioDTO) {
    
         const usuarioSalvo = await this.usuarioService.salvar(dadosDoUsuario);
-        return {usuario: new ListaUsuarioDTO(usuarioSalvo.id, usuarioSalvo.nome, usuarioSalvo.role),
-             message: 'Usuario criado com sucesso!'};
+        return {
+            usuario: usuarioSalvo,
+            message: "Usuario salvo com sucesso!"
+        }
     }
 
     @Get()
@@ -38,7 +41,8 @@ export class UsuarioController{
     @Roles(Role.Professor, Role.Aluno)
     async buscaPorId(@Param('id') id: string){
         const usuario = await this.usuarioService.buscaPorId(id);
-        return usuario;
+        
+        return {usuario: new DescricaoUsuarioDTO(usuario)};
     }
 
     @Patch('/:id')
@@ -47,7 +51,7 @@ export class UsuarioController{
     async atualizaUsuario( @Param('id') id: string, @Body() novosDados: AtualizaUsuarioDTO){
         const usuarioAtualizado = await this.usuarioService.atualiza(id,novosDados);
         return {
-            usuario: new ListaUsuarioDTO(usuarioAtualizado.id, usuarioAtualizado.nome,usuarioAtualizado.role),
+            usuario: new ListaUsuarioDTO(usuarioAtualizado),
             message: 'Usuario atualizado com Sucesso'
         }
     }
@@ -58,7 +62,7 @@ export class UsuarioController{
     async removeUsuario(@Param('id') id: string){
         const usuarioRemovido = await this.usuarioService.remover(id);
         return{
-            usuario: new ListaUsuarioDTO(usuarioRemovido.id,usuarioRemovido.nome,usuarioRemovido.role),
+            usuario: new ListaUsuarioDTO(usuarioRemovido),
             message: 'Usuario Removido com Sucesso'
         }
     }
