@@ -27,14 +27,22 @@ export class UsuarioController{
 
     @Get()
     @UseGuards(AuthGuard)
-    @Roles(Role.Professor,Role.Aluno)
+    @Roles(Role.Professor)
     async listaUsuarios(){
         const usuariosLista = await this.usuarioService.listaUsuarios();
         return usuariosLista;
     }
 
-    @Patch('/:id')
+    @Get('/:id')
     @UseGuards(AuthGuard)
+    @Roles(Role.Professor, Role.Aluno)
+    async buscaPorId(@Param('id') id: string){
+        const usuario = await this.usuarioService.buscaPorId(id);
+        return usuario;
+    }
+
+    @Patch('/:id')
+    @UseGuards(AuthGuard, RolesGuard)
     @Roles(Role.Professor,Role.Aluno)
     async atualizaUsuario( @Param('id') id: string, @Body() novosDados: AtualizaUsuarioDTO){
         const usuarioAtualizado = await this.usuarioService.atualiza(id,novosDados);
@@ -54,5 +62,4 @@ export class UsuarioController{
             message: 'Usuario Removido com Sucesso'
         }
     }
-
 }

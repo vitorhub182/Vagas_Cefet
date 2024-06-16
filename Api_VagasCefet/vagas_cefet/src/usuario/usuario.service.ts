@@ -15,7 +15,9 @@ export class UsuarioService{
     private readonly usuarioRepository: Repository<UsuarioEntity>,
     private configService: ConfigService
     ){}
-    private async buscaPorId(usuarioid: string){
+
+
+    async buscaPorId(usuarioid: string){
 
         try{
             const possivelUsuario = await this.usuarioRepository.findOne({
