@@ -1,4 +1,5 @@
-import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn} from 'typeorm'
+import { VagaEntity } from 'src/vagas/vaga.entity';
+import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, OneToMany, JoinColumn} from 'typeorm'
 
 @Entity({name: 'usuarios'})
 export class UsuarioEntity {
@@ -40,5 +41,7 @@ export class UsuarioEntity {
     @DeleteDateColumn({name: 'deleted_at'})
     deletedAt: string;
 
-    
+    @OneToMany(type => VagaEntity,vaga => vaga.userId)
+    @JoinColumn({ referencedColumnName: "title" })
+    vaga: VagaEntity;
 }

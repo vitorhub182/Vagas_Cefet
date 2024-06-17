@@ -1,30 +1,29 @@
+import { IntegerType } from "typeorm";
+
 export class DescricaoVagaDTO  {
     readonly id: string;
-    readonly email: string;
-    readonly nome_completo: string;
-    readonly role: string;
-    readonly apelido: string;
-    readonly resumo: string; 
-    readonly formacao: string; 
-    readonly exp_profissional: string;
+    readonly titulo: string;
+    readonly contratante: string;
+    readonly tipo: string;
+    readonly requisitos: string;
+    readonly detalhes: string; 
+    readonly status: number; 
 
-    constructor(usuario: {
+    constructor(vaga: {
         id: string,
-        email: string,
-        nome_completo: string,
-        role: string,
-        apelido: string,
-        resumo: string, 
-        formacao: string, 
-        exp_profissional: string
+        titulo: string;
+        contratante: string;
+        tipo: string;
+        requisitos: string;
+        detalhes: string; 
+        status: number; 
     }) {
-        this.id = usuario.id;
-        this.email = usuario.email;
-        this.nome_completo = usuario.nome_completo;
-        this.role = usuario.role;
-        this.apelido = usuario.apelido;
-        this.resumo = usuario.resumo;
-        this.formacao = usuario.formacao;
-        this.exp_profissional = usuario.exp_profissional;
+        this.id = vaga.id;
+        this.titulo = vaga.titulo;
+        this.contratante = vaga.contratante;
+        this.tipo = vaga.tipo;
+        this.requisitos = vaga.requisitos;
+        this.detalhes = vaga.detalhes;
+        this.status = vaga.status;
     }
 }

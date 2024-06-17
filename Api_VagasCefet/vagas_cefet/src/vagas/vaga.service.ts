@@ -1,19 +1,16 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ListaVagaDTO } from "./dto/ListaVaga.dto";
 import { VagaEntity } from "./vaga.entity";
 import { Repository } from "typeorm";
-import { createCipheriv, randomBytes, scrypt } from 'crypto';
-import { promisify } from 'util';
 import { ConfigService } from "@nestjs/config";
 import { CriaVagaDTO } from "./dto/CriaVaga.dto";
-import { DescricaoVagaDTO } from "./dto/DescricaoVaga.dto";
 
 @Injectable()
 export class VagaService{
     constructor(
     @InjectRepository(VagaEntity) // alinhar repository ao entity
     private readonly vagaRepository: Repository<VagaEntity>,
+
     private configService: ConfigService
     ){}
 
@@ -25,7 +22,7 @@ export class VagaService{
                 where: { id: vagaid}
             });
             if(!possivelVaga){
-                throw new Error('Vaga não existe');
+                throw new NotFoundException('Vaga não existe');
             }
             return possivelVaga;
 
@@ -33,7 +30,7 @@ export class VagaService{
             if (error instanceof NotFoundException) {
                 throw error;
             }
-            throw new InternalServerErrorException('Erro ao buscar id do vaga');
+            throw new InternalServerErrorException('Erro ao buscar id da vaga');
         }
     }
 
@@ -42,7 +39,7 @@ export class VagaService{
         try{
             const listaDeVagas = await this.vagaRepository.find();
             
-            //const teste = await this.vagaRepository.createQueryBuilder('vagas').select(['vagas.id']).getMany();
+            //const teste = await this.vagaRepository.createQueryBuilder('vagas').select(['vagas.id']).getMany();*/
            
             return listaDeVagas;
 
@@ -57,27 +54,7 @@ export class VagaService{
     async salvar(dadosVaga: CriaVagaDTO){
 
         try{
-            const vagaEntity = new VagaEntity();
-            vagaEntity.email = dadosVaga.email;
-            vagaEntity.nome_completo = dadosVaga.nome_completo;
-            vagaEntity.senha = dadosVaga.senha;
-            vagaEntity.role = dadosVaga.role;
-            vagaEntity.apelido = dadosVaga.apelido;
-            vagaEntity.resumo = dadosVaga.resumo;
-            vagaEntity.formacao = dadosVaga.formacao;
-            vagaEntity.exp_profissional = dadosVaga.exp_profissional;
-            
-            const password = this.configService.get<string>('ENCRIPT');
-            const iv = randomBytes(16);
-            const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer;
-            const cipher = createCipheriv('aes-256-ctr', key, iv);
-            const senhaEncrypted = Buffer.concat([cipher.update(dadosVaga.senha),cipher.final(),]);
-            const ivBase64 = iv.toString('base64');
-            const encryptedBase64 = senhaEncrypted.toString('base64');
-            dadosVaga.senha = `${ivBase64}:${encryptedBase64}`; 
-
             const vagaSalva = await this.vagaRepository.save(dadosVaga);
-    
             return vagaSalva;
 
         } catch (error) {
@@ -117,7 +94,7 @@ export class VagaService{
             throw new InternalServerErrorException('Erro ao remover a vaga');
         }
     }
-    
+    /*
     async findOne(emailFornecido: string): Promise<VagaEntity | undefined> {
         try {
             return this.vagaRepository.findOne({
@@ -130,4 +107,5 @@ export class VagaService{
             throw new InternalServerErrorException('Erro ao buscar vaga via FindOne');
         }
     }
+    */
 }

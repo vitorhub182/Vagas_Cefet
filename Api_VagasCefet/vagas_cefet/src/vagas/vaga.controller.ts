@@ -16,7 +16,9 @@ export class VagaController{
     constructor(
         private vagaService: VagaService
     ) {}
-
+    
+    @UseGuards(AuthGuard)
+    @Roles(Role.Professor)
     @Post()
     async criaVaga(@Body() dadosDaVaga: CriaVagaDTO) {   
         const vagaSalva = await this.vagaService.salvar(dadosDaVaga);
@@ -27,52 +29,47 @@ export class VagaController{
     }
 
     @Get()
-    @UseGuards(AuthGuard)
-    @Roles(Role.Professor)
     async listaVagas(){
         const vagasLista = await this.vagaService.listaVagas();
-    
         const vagasListaDTO = vagasLista.map(
             vaga => new ListaVagaDTO(vaga)
         )
-
         return { 
             listaDeVagas: vagasListaDTO,
-            message: "Lista de vagas apresentada com Sucesso!"
+            message: "Lista de vagas apresentada com sucesso!"
         }
     }
 
+
     @Get('/:id')
-    @UseGuards(AuthGuard)
-    @Roles(Role.Professor, Role.Aluno)
     async buscaPorId(@Param('id') id: string){
         const vaga = await this.vagaService.buscaPorId(id);
         
         return {
             vaga: new DescricaoVagaDTO(vaga),
-            message: "Vaga apresentada com Sucesso!"
+            message: "Vaga apresentada com sucesso!"
         };
     }
 
     @Patch('/:id')
-    @UseGuards(AuthGuard, RolesGuard)
-    @Roles(Role.Professor,Role.Aluno)
+    @UseGuards(AuthGuard)
+    @Roles(Role.Professor)
     async atualizaVaga( @Param('id') id: string, @Body() novosDados: AtualizaVagaDTO){
         const vagaAtualizado = await this.vagaService.atualiza(id,novosDados);
         return {
             vaga: new DescricaoVagaDTO(vagaAtualizado),
-            message: 'Vaga atualizada com Sucesso!'
+            message: 'Vaga atualizada com sucesso!'
         }
     }
 
     @Delete('/:id')
-    @UseGuards(AuthGuard,RolesGuard)
-    @Roles(Role.Professor,Role.Aluno)
+    @UseGuards(AuthGuard)
+    @Roles(Role.Professor)
     async removeVaga(@Param('id') id: string){
         const vagaRemovido = await this.vagaService.remover(id);
         return{
             vaga: new DescricaoVagaDTO(vagaRemovido),
-            message: 'Vaga Removida com Sucesso!'
+            message: 'Vaga Removida com sucesso!'
         }
     }
 }

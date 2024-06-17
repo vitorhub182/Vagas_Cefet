@@ -1,2 +1,2 @@
 endpoint: DELETE /usuarios/123123 --> invalid input syntax for type uuid: "1212" ====> Tratar exceção
-verificar se deletar somente é permitido para o proprio usuario
+Adicionar guardião para que o professor possa editar e e excluir vagas somente que ele mesmo criou;

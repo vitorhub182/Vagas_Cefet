@@ -1,31 +1,24 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import {IsNotEmpty, IsOptional} from "class-validator";
 
 
 export class CriaVagaDTO {
     
-    @IsNotEmpty({message: "Campo 'nome_completo' não pode ser vazio"})
-    nome_completo: string;
+    @IsNotEmpty({message: "Campo 'titulo' não pode ser vazio"})
+    titulo: string;
     
-    @IsEmail(undefined, {message: "O 'email' informado é inválido"})
-    @IsNotEmpty({message: "Campo 'email' não pode ser vazio"})
-    email: string;
+    @IsNotEmpty({message: "Campo 'contratante' não pode ser vazio"})
+    contratante: string;
     
-    @MinLength(6, {message: "A 'senha' precisa ter pelo menos 6 caracteres"})
-    @IsNotEmpty({message: "Campo 'senha' não pode ser vazio"})
-    senha: string;
+    @IsNotEmpty({message: "Campo 'tipo' não pode ser vazio"})
+    tipo: string;
 
-    @IsNotEmpty({message: "Campo 'role' não pode ser vazio"})
-    role: string;
-
-    @IsNotEmpty({message: "Campo 'apelido' não pode ser vazio"})
-    apelido: string;
+    @IsNotEmpty({message: "Campo 'requisitos' não pode ser vazio"})
+    requisitos: string;
 
     @IsOptional()
-    resumo: string;
+    detalhes: string;
 
-    @IsOptional()
-    exp_profissional: string;
+    @IsNotEmpty({message: "Campo 'status' não pode ser vazio"})
+    status: number;
 
-    @IsOptional()
-    formacao: string;
 }

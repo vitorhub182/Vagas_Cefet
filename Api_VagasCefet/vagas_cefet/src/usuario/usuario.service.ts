@@ -23,7 +23,7 @@ export class UsuarioService{
                 where: { id: usuarioid}
             });
             if(!possivelUsuario){
-                throw new Error('Usuario não existe');
+                throw new NotFoundException('Usuario não existe');
             }
             return possivelUsuario;
 
@@ -55,15 +55,6 @@ export class UsuarioService{
     async salvar(dadosUsuario: CriaUsuarioDTO){
 
         try{
-            const usuarioEntity = new UsuarioEntity();
-            usuarioEntity.email = dadosUsuario.email;
-            usuarioEntity.nome_completo = dadosUsuario.nome_completo;
-            usuarioEntity.senha = dadosUsuario.senha;
-            usuarioEntity.role = dadosUsuario.role;
-            usuarioEntity.apelido = dadosUsuario.apelido;
-            usuarioEntity.resumo = dadosUsuario.resumo;
-            usuarioEntity.formacao = dadosUsuario.formacao;
-            usuarioEntity.exp_profissional = dadosUsuario.exp_profissional;
             
             const password = this.configService.get<string>('ENCRIPT');
             const iv = randomBytes(16);

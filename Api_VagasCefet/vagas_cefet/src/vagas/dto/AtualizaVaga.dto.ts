@@ -1,34 +1,28 @@
 import { IsEmail, IsNotEmpty, IsOptional, MinLength } from "class-validator";
+import { IntegerType } from "typeorm";
 
 export class AtualizaVagaDTO {
 
-    @IsNotEmpty({message: "Campo 'role' não pode ser vazio"})
     @IsOptional()
-    role: string;
-
-    @IsNotEmpty({message: "Campo 'nome_completo' não pode ser vazio"})
+    @IsNotEmpty({message: "Campo 'titulo' não pode ser vazio"})
+    titulo: string;
+    
     @IsOptional()
-    nome_completo: string;
-
-    @IsEmail(undefined, {message: "O 'email' informado é inválido"})
-    @IsNotEmpty({message: "Campo 'email' não pode ser vazio"})
+    @IsNotEmpty({message: "Campo 'contratante' não pode ser vazio"})
+    contratante: string;
+    
     @IsOptional()
-    email: string;
-    @IsNotEmpty({message: "Campo 'senha' não pode ser vazio"})
-    @MinLength(6, {message: "A 'senha' precisa ter pelo menos 6 caracteres"})
-    @IsOptional()
-    senha: string;
-
-    @IsNotEmpty({message: "Campo 'apelido' não pode ser vazio"})
-    @IsOptional()
-    apelido: string;
+    @IsNotEmpty({message: "Campo 'tipo' não pode ser vazio"})
+    tipo: string;
 
     @IsOptional()
-    resumo: string;
+    @IsNotEmpty({message: "Campo 'requisitos' não pode ser vazio"})
+    requisitos: string;
 
     @IsOptional()
-    exp_profissional: string;
+    detalhes: string;
 
     @IsOptional()
-    formacao: string;
+    @IsNotEmpty({message: "Campo 'status' não pode ser vazio"})
+    status: number;
 }

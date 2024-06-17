@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(
-    private reflector: Reflector,
+    //private reflector: Reflector,
     private jwtService: JwtService,
     private configService: ConfigService,
     @InjectRepository(UsuarioEntity) // alinhar repository ao entity

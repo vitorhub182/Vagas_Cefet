@@ -4,11 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { VagaModule } from './vagas/vaga.module';
 
 
 @Module({
   imports: [
     UsuarioModule,
+    VagaModule,
 
     ConfigModule.forRoot({
       isGlobal: true
@@ -16,7 +18,7 @@ import { AuthModule } from './auth/auth.module';
 
     TypeOrmModule.forRootAsync({
       useClass: PostgresConfigService,
-      inject: [PostgresConfigService]
+      inject: [PostgresConfigService],
     }),
     AuthModule
   ],

@@ -1,16 +1,16 @@
 export class ListaVagaDTO  {
     readonly id: string;
-    readonly email: string;
-    readonly nome_completo: string;
+    readonly titulo: string;
+    readonly tipo: string;
 
     constructor(vaga: {
         id: string,
-        email: string,
-        nome_completo: string,
+        titulo: string,
+        tipo: string,
 
     }) {
         this.id = vaga.id;
-        this.email = vaga.email;
-        this.nome_completo = vaga.nome_completo;
+        this.titulo = vaga.titulo;
+        this.tipo = vaga.tipo;
     }
 }
