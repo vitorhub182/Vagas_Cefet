@@ -31,6 +31,7 @@ export class UsuarioService{
             if (error instanceof NotFoundException) {
                 throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao buscar id do usuario');
         }
     }
@@ -48,6 +49,7 @@ export class UsuarioService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao listar usuarios');
         }
     }
@@ -73,6 +75,7 @@ export class UsuarioService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao salvar usuarios');
         }
     }
@@ -87,6 +90,7 @@ export class UsuarioService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro na verificação do e-mail do usuario');
         }
     }
@@ -102,6 +106,7 @@ export class UsuarioService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao atualizar o usuario');
         }
     }
@@ -117,6 +122,7 @@ export class UsuarioService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao remover usuario');
         }
     }
@@ -130,6 +136,7 @@ export class UsuarioService{
             if (error instanceof NotFoundException) {
                 throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao buscar usuario via FindOne');
         }
     }

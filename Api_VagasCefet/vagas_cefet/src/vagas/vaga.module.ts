@@ -6,6 +6,7 @@ import { VagaEntity } from "./vaga.entity";
 import { AuthModule } from "src/auth/auth.module";
 import { JwtService } from "@nestjs/jwt";
 import { UsuarioModule } from "src/usuario/usuario.module";
+import { TranslateJWT } from "src/jwtTranslate/jwtTranslateToId";
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { UsuarioModule } from "src/usuario/usuario.module";
     providers:[
         VagaService,
         JwtService,
+        TranslateJWT,
     ],
     exports: [TypeOrmModule],
     

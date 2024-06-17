@@ -1,5 +1,5 @@
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
-import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, IntegerType, TableForeignKey} from 'typeorm'
+import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, IntegerType, TableForeignKey, ManyToOne, JoinColumn} from 'typeorm'
 
 @Entity({name: 'vagas'})
 export class VagaEntity {
@@ -25,9 +25,6 @@ export class VagaEntity {
     @Column({name: 'status', nullable: false})
     status: number;
 
-    @Column({name: 'userId', nullable: false})
-    userId: string;
-
     @CreateDateColumn({name: 'created_at'})
     createdAt: string;
 
@@ -36,5 +33,9 @@ export class VagaEntity {
 
     @DeleteDateColumn({name: 'deleted_at'})
     deletedAt: string;
+
+    @ManyToOne(() => UsuarioEntity, (usuario) => usuario.vaga)
+    @JoinColumn({name: "professorId"})
+    usuario:UsuarioEntity;
 
 }

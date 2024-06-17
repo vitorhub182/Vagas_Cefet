@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, MinLength } from "class-validator";
+import { UsuarioEntity } from "src/usuario/usuario.entity";
 import { IntegerType } from "typeorm";
 
 export class AtualizaVagaDTO {
@@ -25,4 +26,8 @@ export class AtualizaVagaDTO {
     @IsOptional()
     @IsNotEmpty({message: "Campo 'status' não pode ser vazio"})
     status: number;
+
+    @IsOptional()
+    usuario: UsuarioEntity;
+
 }

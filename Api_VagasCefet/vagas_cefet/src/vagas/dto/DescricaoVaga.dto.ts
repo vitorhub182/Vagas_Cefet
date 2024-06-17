@@ -1,3 +1,4 @@
+import { UsuarioEntity } from "src/usuario/usuario.entity";
 import { IntegerType } from "typeorm";
 
 export class DescricaoVagaDTO  {
@@ -7,7 +8,8 @@ export class DescricaoVagaDTO  {
     readonly tipo: string;
     readonly requisitos: string;
     readonly detalhes: string; 
-    readonly status: number; 
+    readonly status: number;
+    readonly professorId: string
 
     constructor(vaga: {
         id: string,
@@ -17,6 +19,7 @@ export class DescricaoVagaDTO  {
         requisitos: string;
         detalhes: string; 
         status: number; 
+        usuario: UsuarioEntity;
     }) {
         this.id = vaga.id;
         this.titulo = vaga.titulo;
@@ -25,5 +28,6 @@ export class DescricaoVagaDTO  {
         this.requisitos = vaga.requisitos;
         this.detalhes = vaga.detalhes;
         this.status = vaga.status;
+        this.professorId = vaga.usuario.id
     }
 }

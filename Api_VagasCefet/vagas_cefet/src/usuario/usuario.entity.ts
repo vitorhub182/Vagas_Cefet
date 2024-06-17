@@ -41,7 +41,6 @@ export class UsuarioEntity {
     @DeleteDateColumn({name: 'deleted_at'})
     deletedAt: string;
 
-    @OneToMany(type => VagaEntity,vaga => vaga.userId)
-    @JoinColumn({ referencedColumnName: "title" })
-    vaga: VagaEntity;
+    @OneToMany(() => VagaEntity, (vaga) => vaga.usuario)
+    vaga: VagaEntity[];
 }

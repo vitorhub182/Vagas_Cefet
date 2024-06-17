@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Headers, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { CriaVagaDTO } from "./dto/CriaVaga.dto";
 import { ListaVagaDTO } from "./dto/ListaVaga.dto";
 import { AtualizaVagaDTO } from "./dto/AtualizaVaga.dto";
@@ -16,12 +16,13 @@ export class VagaController{
     constructor(
         private vagaService: VagaService
     ) {}
-    
+
     @UseGuards(AuthGuard)
     @Roles(Role.Professor)
     @Post()
-    async criaVaga(@Body() dadosDaVaga: CriaVagaDTO) {   
-        const vagaSalva = await this.vagaService.salvar(dadosDaVaga);
+    async criaVaga(@Headers('authorization') authHeader: string,@Body() dadosDaVaga: CriaVagaDTO) {
+
+        const vagaSalva = await this.vagaService.salvar(dadosDaVaga,authHeader,);
         return {
             vaga: new DescricaoVagaDTO(vagaSalva),
             message: "Vaga salva com sucesso!"

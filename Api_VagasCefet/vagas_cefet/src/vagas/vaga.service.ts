@@ -4,13 +4,14 @@ import { VagaEntity } from "./vaga.entity";
 import { Repository } from "typeorm";
 import { ConfigService } from "@nestjs/config";
 import { CriaVagaDTO } from "./dto/CriaVaga.dto";
+import { TranslateJWT } from "src/jwtTranslate/jwtTranslateToId";
 
 @Injectable()
 export class VagaService{
     constructor(
     @InjectRepository(VagaEntity) // alinhar repository ao entity
     private readonly vagaRepository: Repository<VagaEntity>,
-
+    private jwtTranslate: TranslateJWT,
     private configService: ConfigService
     ){}
 
@@ -30,6 +31,7 @@ export class VagaService{
             if (error instanceof NotFoundException) {
                 throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao buscar id da vaga');
         }
     }
@@ -47,13 +49,15 @@ export class VagaService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao listar vagas');
         }
     }
 
-    async salvar(dadosVaga: CriaVagaDTO){
+    async salvar(dadosVaga: CriaVagaDTO, authHeader: string){
 
         try{
+            dadosVaga.usuario = await this.jwtTranslate.translateJWT(authHeader)
             const vagaSalva = await this.vagaRepository.save(dadosVaga);
             return vagaSalva;
 
@@ -61,6 +65,7 @@ export class VagaService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao salvar a vaga');
         }
     }
@@ -76,6 +81,7 @@ export class VagaService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao atualizar a vaga');
         }
     }
@@ -91,6 +97,7 @@ export class VagaService{
             if (error instanceof NotFoundException) {
               throw error;
             }
+            console.log(error);
             throw new InternalServerErrorException('Erro ao remover a vaga');
         }
     }

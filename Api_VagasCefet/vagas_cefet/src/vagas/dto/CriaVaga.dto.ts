@@ -1,4 +1,5 @@
 import {IsNotEmpty, IsOptional} from "class-validator";
+import { UsuarioEntity } from "src/usuario/usuario.entity";
 
 
 export class CriaVagaDTO {
@@ -20,5 +21,8 @@ export class CriaVagaDTO {
 
     @IsNotEmpty({message: "Campo 'status' não pode ser vazio"})
     status: number;
+
+    @IsOptional()
+    usuario: UsuarioEntity;
 
 }

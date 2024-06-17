@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
@@ -10,7 +9,6 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(
-    //private reflector: Reflector,
     private jwtService: JwtService,
     private configService: ConfigService,
     @InjectRepository(UsuarioEntity) // alinhar repository ao entity
@@ -18,10 +16,6 @@ export class RolesGuard implements CanActivate {
     ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    //const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    //if (!roles) {
-    //  return true;
-    //}
 
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
@@ -43,11 +37,9 @@ export class RolesGuard implements CanActivate {
 
         const user = await this.usuarioRepository.findOne({where: {email: emailJWT}})
         if (user.id !== userId) {
-            throw new UnauthorizedException('You can only delete your own account');
+            throw new UnauthorizedException();
           }
           return true
-        // Verifica se o usuário tem uma das roles necessárias
-        //return roles.some(role => user.role?.includes(role));
     }
     catch {
         throw new UnauthorizedException();
