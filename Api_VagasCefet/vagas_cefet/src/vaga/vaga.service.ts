@@ -101,18 +101,4 @@ export class VagaService{
             throw new InternalServerErrorException('Erro ao remover a vaga');
         }
     }
-    /*
-    async findOne(emailFornecido: string): Promise<VagaEntity | undefined> {
-        try {
-            return this.vagaRepository.findOne({
-                where: { email: emailFornecido}
-            });
-        } catch (error) {
-            if (error instanceof NotFoundException) {
-                throw error;
-            }
-            throw new InternalServerErrorException('Erro ao buscar vaga via FindOne');
-        }
-    }
-    */
 }

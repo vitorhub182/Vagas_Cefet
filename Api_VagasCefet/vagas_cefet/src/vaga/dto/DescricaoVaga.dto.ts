@@ -19,7 +19,7 @@ export class DescricaoVagaDTO  {
         requisitos: string;
         detalhes: string; 
         status: number; 
-        usuario: UsuarioEntity;
+        professorId: string;
     }) {
         this.id = vaga.id;
         this.titulo = vaga.titulo;
@@ -28,6 +28,6 @@ export class DescricaoVagaDTO  {
         this.requisitos = vaga.requisitos;
         this.detalhes = vaga.detalhes;
         this.status = vaga.status;
-        this.professorId = vaga.usuario.id
+        this.professorId = vaga.professorId
     }
 }

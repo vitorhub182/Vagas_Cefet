@@ -1,2 +1,6 @@
 endpoint: DELETE /usuarios/123123 --> invalid input syntax for type uuid: "1212" ====> Tratar exceção
 Adicionar guardião para que o professor possa editar e e excluir vagas somente que ele mesmo criou;
+Adicionar endpoint para que 1 aluno liste todas as suas inscrições
+Adicionar endpoint para que 1 vaga liste todas as suas inscrições
+
+Adicionar os comentários swagger em vaga e inscrições

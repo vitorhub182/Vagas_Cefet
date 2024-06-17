@@ -4,13 +4,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { VagaModule } from './vagas/vaga.module';
+import { VagaModule } from './vaga/vaga.module';
+import { InscricaoModule } from './inscricao/inscricao.module';
 
 
 @Module({
   imports: [
     UsuarioModule,
     VagaModule,
+    InscricaoModule,
 
     ConfigModule.forRoot({
       isGlobal: true

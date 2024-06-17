@@ -2,7 +2,6 @@ import { Injectable, ExecutionContext } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Request } from 'express';
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
 import { Repository } from 'typeorm';
 
