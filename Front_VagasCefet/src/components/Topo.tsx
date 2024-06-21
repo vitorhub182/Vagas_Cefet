@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 
-export default function Topo(){
+export default function Topo(props:any){
     return(
         <div className='topo text-white'>
             <div className='logo'>Vagas.Cefet</div>
@@ -13,6 +13,7 @@ export default function Topo(){
                     <Link className="linkMenu" href="/perfil/perfil">
                         Perfil
                     </Link>
+                    {props.children}
                 </nav>   
             </div>
         </div>

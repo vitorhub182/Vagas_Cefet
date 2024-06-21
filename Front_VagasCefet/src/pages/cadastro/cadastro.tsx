@@ -11,7 +11,7 @@ import { Input } from "@/components/input";
 import { Textarea } from "@nextui-org/input";
 import axios from "axios";
 
-/*
+
 const createUser = async (data:{
     nome: string;
     email: string;
@@ -27,7 +27,7 @@ const createUser = async (data:{
     )
     return response.data
 }
-*/
+
 const schema = z.object({
     nome: z.string().min(1, "Campo Nome não pode ser nulo."),
     email: z.string().email({message:"Digite um e-mail válido."})
@@ -39,9 +39,6 @@ const schema = z.object({
     resumo:z.string().max(300),
     formacao:z.string().max(300),
     expProfissional:z.string().max(300),
-
-
-
 })
 .refine(({senha, confirmarSenha}) => senha === confirmarSenha, {
     message: "Senhas não são iguais.",
@@ -50,8 +47,8 @@ const schema = z.object({
 
 type DataProps = z.infer<typeof schema>;
 
-export default async function PaginaCadastro(){
-   /* const createdUser = await createUser({
+export default function PaginaCadastro(){
+    const createdUser = createUser({
         nome: 'nome',
         email: 'email',
         senha: 'senha',
@@ -64,7 +61,7 @@ export default async function PaginaCadastro(){
     })
 
     console.log({createdUser});
-    */
+    
 
     const { register, handleSubmit, formState: {errors} } = useForm<DataProps>({
         mode: 'onBlur',
