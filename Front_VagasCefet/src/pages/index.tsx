@@ -1,22 +1,39 @@
-import Topo from "@/components/Topo"
-import Vagas from "@/components/Vagas"
-import Link from "next/link"
 
-export default function Home(){
-    return(
+import React, { useEffect, useState } from 'react';
+import Topo from '@/components/Topo';
+import Vagas from '@/components/Vagas';
+import Link from 'next/link';
+import api from '@/services/api'; // Importe o axios configurado
+
+export default function Home() {
+    const [vagas, setVagas] = useState([]);
+
+    useEffect(() => {
+        const fetchVagas = async () => {
+            try {
+                const response = await api.get('/vagas');
+                setVagas(response.data);
+            } catch (error) {
+                console.error('Erro ao carregar vagas:', error);
+            }
+        };
+
+        fetchVagas();
+    }, []);
+
+    return (
         <main>
-            <Topo> 
-                 <Link className="linkMenu" href="/vaga/cadastrovagas">
-                        Cadastrar Vagas
-                 </Link>
+            <Topo>
+                <Link className="linkMenu" href="/vaga/cadastrovagas">
+                    Cadastrar Vagas
+                </Link>
             </Topo>
 
-            <div className="">
-                <Vagas>Vaga1</Vagas>
-                <Vagas>Vaga2</Vagas>
-                <Vagas>Vaga3</Vagas>
-                <Vagas>Vaga4</Vagas>
+            <div>
+                {vagas.map((vaga: any, index: number) => (
+                    <Vagas key={index}>{vaga.titulo}</Vagas>
+                ))}
             </div>
         </main>
-    )
+    );
 }

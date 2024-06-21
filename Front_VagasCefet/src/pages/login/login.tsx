@@ -9,6 +9,12 @@ import { Schema } from "zod";
 import { Input } from "@/components/input";
 import { Textarea } from "@nextui-org/input";
 import Link from "next/link";
+import { useState } from "react";
+import { LoginDTO } from "@/types/login";
+import api from "@/services/api";
+import { redirect, RedirectType } from "../../../node_modules/next/navigation";
+import { url } from "inspector";
+import { useRouter } from "../../../node_modules/next/router";
 
 const inter = Inter({ 
     weight: ["300","400","500"],
@@ -22,25 +28,47 @@ const inter = Inter({
 
 type DataProps = z.infer<typeof schema>;
 
-export default function PaginaLogin(){
-    const { register, handleSubmit, formState: {errors} } = useForm<DataProps>({
+
+const LoginUsuarioForm: React.FC = () => {
+    const [message, setMessage] = useState<string>('');
+    const { register, handleSubmit, formState: { errors } } = useForm<DataProps>({
         mode: 'onBlur',
         resolver: zodResolver(schema)
-    })
+    });
+
+    const router = useRouter();
+
+    const onSubmit = async (data: DataProps) => {
+        try {
+            const response = await api.post<LoginDTO>('/login', data);
+            
+            const token = response.data.access_token;
+            localStorage.setItem('token', token);
+            
+            setMessage('Usuário logado com sucesso com sucesso!');
+            // Limpar formulário após o envio
+            Object.keys(data).forEach(key => {
+                data[key as keyof DataProps] = '';
+            });
+
+            router.push('../vagas/index.tsx');
+
+        } catch (error) {
+            setMessage('Erro ao realizar login usuário.');
+            console.error('Erro ao realizar o login usuário:', error);
+        }
+    };
     return(
         <div>
-            
             <Topo/>
-            <form title="Cadastro" onSubmit={handleSubmit((data) => console.log(data))}>
+            <form title="Login" onSubmit={handleSubmit(onSubmit)}>
                 <h1>Login</h1>
-
                 <Input {... register('email')}
                  type="text"
-                  placeholder="Digite seu nome completo"
+                  placeholder="Digite seu email"
                   label="E-mail:"
                   helperText={errors.email?.message}
                   />
-
                 <Input {... register('senha')}
                  type="password"
                   placeholder="Digite sua senha"
@@ -61,3 +89,5 @@ export default function PaginaLogin(){
         </div>
     )
 }
+
+export default LoginUsuarioForm
