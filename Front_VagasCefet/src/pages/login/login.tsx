@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Schema } from "zod";
 import { Input } from "@/components/input";
 import { Textarea } from "@nextui-org/input";
+import Link from "next/link";
 
 const inter = Inter({ 
     weight: ["300","400","500"],
@@ -46,7 +47,15 @@ export default function PaginaLogin(){
                   label="Senha:"
                   helperText={errors.senha?.message}
                   />
+                <Link className='link text-[14px] mt-1' href={"/"}>
+                    Esqueci minha Senha
+                </Link>
                 <input className="button" type="submit" value="Enviar" /> 
+
+                <p className="text-[14px] mt-5">Ainda não é cadastrado?</p>
+                <Link className="link text-[14px]" href={"/cadastro/cadastro"}>
+                    Cadastre-se
+                </Link>
                 
             </form>
         </div>
