@@ -21,10 +21,7 @@ export class InscricaoController{
     async criaInscricao(@Headers('authorization') authHeader: string,@Param('id') vagaId: string) {
 
         const inscricaoSalva = await this.inscricaoService.salvar(authHeader, vagaId);
-        return {
-            inscricao: new DescricaoInscricaoDTO(inscricaoSalva),
-            message: "Inscricao salva com sucesso!"
-        }
+        return new DescricaoInscricaoDTO(inscricaoSalva)
     }
 
     @Get()
@@ -35,10 +32,7 @@ export class InscricaoController{
         const inscricaosListaDTO = inscricaosLista.map(
             inscricao => new ListaInscricoesDTO(inscricao)
         )
-        return { 
-            listaDeInscricaos: inscricaosListaDTO,
-            message: "Lista de inscricaos apresentada com sucesso!"
-        }
+        return inscricaosListaDTO
     }
 
     @Get('/:id')
@@ -47,10 +41,7 @@ export class InscricaoController{
     async buscaPorId(@Param('id') id: string){
         const inscricao = await this.inscricaoService.buscaPorId(id);
         
-        return {
-            inscricao: new DescricaoInscricaoDTO(inscricao),
-            message: "Inscricao apresentada com sucesso!"
-        };
+        return new DescricaoInscricaoDTO(inscricao)
     }
 
     @Patch('/:id')
@@ -58,9 +49,6 @@ export class InscricaoController{
     @Roles(Role.Professor)
     async atualizaInscricao( @Param('id') id: string, @Body() novosDados: AtualizaInscricaoDTO){
         const inscricaoAtualizado = await this.inscricaoService.atualiza(id,novosDados);
-        return {
-            inscricao: new DescricaoInscricaoDTO(inscricaoAtualizado),
-            message: 'Inscricao atualizada com sucesso!'
-        }
+        return  new DescricaoInscricaoDTO(inscricaoAtualizado)
     }
 }

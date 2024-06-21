@@ -11,7 +11,6 @@ import { Reflector } from '@nestjs/core';
 @Injectable()
 export class AuthService {
 
-    
     constructor(
         private jwtService: JwtService,
         @InjectRepository(UsuarioEntity) // alinhar repository ao entity
@@ -34,9 +33,8 @@ export class AuthService {
           throw new UnauthorizedException();
         }
         const payload = { sub: user.id, emailFornecido: user.email };
-        return { access_token: await this.jwtService.signAsync(payload),};
-  }
-  
+        return { access_token: await this.jwtService.signAsync(payload),};}
+          
   private async decryptText(encryptedString: string, senha: string) {
     const [ivBase64, encryptedBase64] = encryptedString.split(':');
     const iv = Buffer.from(ivBase64, 'base64');

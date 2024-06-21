@@ -23,10 +23,7 @@ export class VagaController{
     async criaVaga(@Headers('authorization') authHeader: string,@Body() dadosDaVaga: CriaVagaDTO) {
 
         const vagaSalva = await this.vagaService.salvar(dadosDaVaga,authHeader,);
-        return {
-            vaga: new DescricaoVagaDTO(vagaSalva),
-            message: "Vaga salva com sucesso!"
-        }
+        return new DescricaoVagaDTO(vagaSalva)
     }
 
     @Get()
@@ -35,10 +32,7 @@ export class VagaController{
         const vagasListaDTO = vagasLista.map(
             vaga => new ListaVagaDTO(vaga)
         )
-        return { 
-            listaDeVagas: vagasListaDTO,
-            message: "Lista de vagas apresentada com sucesso!"
-        }
+        return  vagasListaDTO
     }
 
 
@@ -46,10 +40,8 @@ export class VagaController{
     async buscaPorId(@Param('id') id: string){
         const vaga = await this.vagaService.buscaPorId(id);
         
-        return {
-            vaga: new DescricaoVagaDTO(vaga),
-            message: "Vaga apresentada com sucesso!"
-        };
+        return new DescricaoVagaDTO(vaga)
+ 
     }
 
     @Patch('/:id')
@@ -57,10 +49,8 @@ export class VagaController{
     @Roles(Role.Professor)
     async atualizaVaga( @Param('id') id: string, @Body() novosDados: AtualizaVagaDTO){
         const vagaAtualizado = await this.vagaService.atualiza(id,novosDados);
-        return {
-            vaga: new DescricaoVagaDTO(vagaAtualizado),
-            message: 'Vaga atualizada com sucesso!'
-        }
+        
+        return  new DescricaoVagaDTO(vagaAtualizado)       
     }
 
     @Delete('/:id')
@@ -68,9 +58,7 @@ export class VagaController{
     @Roles(Role.Professor)
     async removeVaga(@Param('id') id: string){
         const vagaRemovido = await this.vagaService.remover(id);
-        return{
-            vaga: new DescricaoVagaDTO(vagaRemovido),
-            message: 'Vaga Removida com sucesso!'
-        }
+        return new DescricaoVagaDTO(vagaRemovido)
+ 
     }
 }

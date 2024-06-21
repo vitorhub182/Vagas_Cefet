@@ -14,7 +14,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // erro para dados no json que não estão no dto
     })
   );
-
+  app.enableCors({
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+  });
   const config = new DocumentBuilder()
     .setTitle('Vagas Cefet')
     .setDescription('API de gerenciamento das vagas internas do Cefet!')

@@ -4,8 +4,6 @@ import { EmailEhUnico } from "../validacao/emailUnico.validator";
 import { ValidRole } from "../validacao/tipoRole.validator";
 
 export class CriaUsuarioDTO {
-    
-    @ApiProperty({ description: 'O nome completo do usuário' })
     @ApiProperty({ description: "O ID do usuário", example: "22eb08fe-bda0-4850-9f05-b7239cce8d7f" })
     id: string;
     

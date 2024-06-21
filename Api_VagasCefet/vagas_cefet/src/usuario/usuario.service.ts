@@ -68,7 +68,6 @@ export class UsuarioService{
             dadosUsuario.senha = `${ivBase64}:${encryptedBase64}`; 
 
             const usuarioSalvo = await this.usuarioRepository.save(dadosUsuario);
-         
             return usuarioSalvo;
 
         } catch (error) {

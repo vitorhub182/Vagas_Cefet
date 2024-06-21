@@ -24,13 +24,11 @@ export class UsuarioController{
     @ApiBody({ type: CriaUsuarioDTO })
     @ApiResponse({ status: 201, description: 'Usuário criado com sucesso.', type: DescricaoUsuarioDTO })
     async criaUsuario(@Body() dadosDoUsuario: CriaUsuarioDTO) {
+        console.log(dadosDoUsuario);
    
         const usuarioSalvo = await this.usuarioService.salvar(dadosDoUsuario);
-        
-        return {
-            usuario: new DescricaoUsuarioDTO(usuarioSalvo),
-            message: "Usuario salvo com sucesso!"
-        }
+        return new DescricaoUsuarioDTO(usuarioSalvo)
+
     }
 
     @Get()
@@ -45,10 +43,7 @@ export class UsuarioController{
             usuario => new ListaUsuarioDTO(usuario)
         )
 
-        return {
-            listaDeUsuarios : listaDeUsuarios,
-            message: 'Usuarios listados com Sucesso!'
-        }
+        return  listaDeUsuarios
     }
 
     @Get('/:id')
@@ -60,10 +55,7 @@ export class UsuarioController{
     async buscaPorId(@Param('id') id: string){
         const usuario = await this.usuarioService.buscaPorId(id);
         
-        return {
-            usuario: new DescricaoUsuarioDTO(usuario),
-            message: 'Usuario apresentado com Sucesso!'
-        };
+        return new DescricaoUsuarioDTO(usuario)
     }
 
     @Patch('/:id')
@@ -75,10 +67,7 @@ export class UsuarioController{
     @ApiResponse({ status: 200, description: 'Usuário atualizado com sucesso.', type: DescricaoUsuarioDTO })
     async atualizaUsuario( @Param('id') id: string, @Body() novosDados: AtualizaUsuarioDTO){
         const usuarioAtualizado = await this.usuarioService.atualiza(id,novosDados);
-        return {
-            usuario: new DescricaoUsuarioDTO(usuarioAtualizado),
-            message: 'Usuario atualizado com Sucesso!'
-        }
+        return new DescricaoUsuarioDTO(usuarioAtualizado)
     }
 
     @Delete('/:id')
@@ -89,9 +78,8 @@ export class UsuarioController{
     @ApiResponse({ status: 200, description: 'Usuário removido com sucesso.', type: DescricaoUsuarioDTO })
     async removeUsuario(@Param('id') id: string){
         const usuarioRemovido = await this.usuarioService.remover(id);
-        return{
-            usuario: new DescricaoUsuarioDTO(usuarioRemovido),
-            message: 'Usuario Removido com Sucesso!'
-        }
+
+        return new DescricaoUsuarioDTO(usuarioRemovido)
+
     }
 }
