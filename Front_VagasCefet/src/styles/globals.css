@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'topo.Module.css';
+@import 'login.Module.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+:root {
+
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    margin: 100px auto ;
+    padding: 40px;
+    background-color: #cac8c8;
+    width: 700px;
+    gap: 5px;
+    font-family: inherit;
+    border-radius: 5px;
+    font-weight:500 ;
+    --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    
+}
+
+form h1{
+    text-align: center;
+    font-weight: 600;
+    font-size: xx-large;
+    font-family: inherit;
+    
+}
+form label{
+    display: flex;
+    margin: auto 5px;
+}
+
+.radio{
+    margin: auto 5px;
+}
+
+.button{
+    background: #0066A2;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    border-style: outset;
+    border-color: #0066A2;
+    height: 50px;
+    width: 100px;
+    margin-top: 10px;
+    font: bold15px arial,sans-serif;
+    text-shadow: none;
+
+}
+
+form TextArea{
+    display: flex;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    
+    &:focus{
+    border-color: #5300bf;
+    outline: 2px solid #ccc ;
+    }
+
+    &::placeholder{
+    color: #ccc;
+    }
+}
+
+
+
+

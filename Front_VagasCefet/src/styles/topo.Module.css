@@ -1,0 +1,51 @@
+.topo{
+  width: 100%;
+  height: 50px;
+  align-items: center;
+  display: flex;
+  margin: 0 auto;
+  background-color: #1e93e7;
+}
+.logo{
+  margin: 0 20px;
+  font-weight: 400;
+  font-size: 40px;
+  font-family: 'Inter', sans-serif;
+}
+
+  .menu{
+    display: flex;
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: 'Times New Roman', Times, serif;
+    margin-left: 20px;
+  }
+
+  .linkMenu{
+    position: relative;
+    margin: 0 10px;
+    text-decoration: none;
+
+  }
+  .linkMenu:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    background-color: #ffffff;
+    visibility: hidden;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+  }
+  .linkMenu:hover:before {
+    visibility: visible;
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+  .textbox{
+    border-radius: 10px;
+  }
