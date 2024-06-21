@@ -9,6 +9,7 @@ import { Textarea } from "@nextui-org/input";
 import axios from "axios";
 import { CriaUsuarioDTO, Usuario } from "@/types/Usuario";
 import api from "@/services/api";
+import { useRouter } from "../../../node_modules/next/router";
 
 const schema = z.object({
     nome_completo: z.string().min(1, "Campo Nome não pode ser nulo."),
@@ -28,6 +29,10 @@ const schema = z.object({
 type DataProps = z.infer<typeof schema>;
 
 const UsuarioForm: React.FC = () => {
+
+    const router = useRouter();
+
+
     const [message, setMessage] = useState<string>('');
     const { register, handleSubmit, formState: { errors } } = useForm<DataProps>({
         mode: 'onBlur',
@@ -43,6 +48,7 @@ const UsuarioForm: React.FC = () => {
             Object.keys(data).forEach(key => {
                 data[key as keyof DataProps] = '';
             });
+            router.push('/login/login');
         } catch (error) {
             setMessage('Erro ao criar usuário.');
             console.error('Erro ao criar usuário:', error);

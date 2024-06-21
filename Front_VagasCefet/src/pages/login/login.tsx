@@ -51,7 +51,7 @@ const LoginUsuarioForm: React.FC = () => {
                 data[key as keyof DataProps] = '';
             });
 
-            router.push('../vagas/index.tsx');
+            router.push('/');
 
         } catch (error) {
             setMessage('Erro ao realizar login usuário.');
