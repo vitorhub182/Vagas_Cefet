@@ -38,7 +38,7 @@ const items: ISidebarItem[] = [
   },
   {
     name: "Vagas",
-    path: "/",
+    path: "/vagas",
     icon: UserCheck,
   },
   {

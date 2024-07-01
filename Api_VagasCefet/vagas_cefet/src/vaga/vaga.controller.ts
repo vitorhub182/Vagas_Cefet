@@ -27,6 +27,8 @@ export class VagaController{
     }
 
     @Get()
+    @UseGuards(AuthGuard)
+    @Roles(Role.Professor, Role.Aluno)
     async listaVagas(){
         const vagasLista = await this.vagaService.listaVagas();
         const vagasListaDTO = vagasLista.map(
@@ -37,6 +39,8 @@ export class VagaController{
 
 
     @Get('/:id')
+    @UseGuards(AuthGuard)
+    @Roles(Role.Professor, Role.Aluno)
     async buscaPorId(@Param('id') id: string){
         const vaga = await this.vagaService.buscaPorId(id);
         

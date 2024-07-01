@@ -22,6 +22,11 @@ export default function LoginForm() {
         variant: 'destructive',
         title: 'Credências inválidas'
       }))
+    } else if (!log) {
+      return (toast({
+        variant: 'destructive',
+        title: 'Falha ao se conectar com a API!'
+      }))
     }
   };
 

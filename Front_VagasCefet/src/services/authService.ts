@@ -15,14 +15,12 @@ export async function authenticate(email: string, senha: string) {
       sessionStorage.setItem('access_token', data.access_token);
       sessionStorage.setItem('id', data.id);
       sessionStorage.setItem('username', data.apelido);
+      sessionStorage.setItem('role', data.role);
       return data.access_token;  
     }else {
       return false;
     }
   } catch {
-    //const data = {access_token: '123'};
-    //localStorage.setItem('access_token', data.access_token);
-    //return data.access_token;
     throw new Error('Falha ao se conectar com a api');
   }
 

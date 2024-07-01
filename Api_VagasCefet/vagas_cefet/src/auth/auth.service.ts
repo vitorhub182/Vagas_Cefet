@@ -19,7 +19,7 @@ export class AuthService {
         private reflector: Reflector,
         ) {}
 
-  async signIn(emailFornecido: string, pass: string): Promise<{ access_token: string, id: string, apelido: string }> {
+  async signIn(emailFornecido: string, pass: string): Promise<{ access_token: string, id: string, apelido: string, role: string }> {
         
         const user = await this.usuarioRepository.findOne({where: { email: emailFornecido}});
         
@@ -36,7 +36,8 @@ export class AuthService {
         return { 
           access_token: await this.jwtService.signAsync(payload),
           id: user.id,
-          apelido: user.apelido
+          apelido: user.apelido,
+          role: user.role
         };}
           
   private async decryptText(encryptedString: string, senha: string) {

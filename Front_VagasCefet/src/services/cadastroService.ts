@@ -1,5 +1,4 @@
-import { CriaUsuarioDTO, FalhaCadastro } from "@/dto/cadastroUsuario";
-import { DescricaoUsuarioDTO } from "@/dto/descricaoUsuario";
+import { CriaUsuarioDTO } from "@/dto/usuario";
 
 export async function cadastroUsuario(dadosUsuario: CriaUsuarioDTO) {
 

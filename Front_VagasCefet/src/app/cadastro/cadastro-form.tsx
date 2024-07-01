@@ -24,11 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cadastroUsuario } from "@/services/cadastroService";
-import { FalhaCadastro } from "@/dto/cadastroUsuario";
-import { DescricaoUsuarioDTO } from "@/dto/descricaoUsuario";
-import { ToastAction } from "@/components/ui/toast";
-import { routeModule } from "next/dist/build/templates/pages";
-import { Router } from "lucide-react";
+import { FalhaCadastro } from "@/dto/usuario";
+
 
 const FormSchema = z.object({
   nome_completo: z.string().min(1, "Campo Nome não pode ser nulo."),
@@ -88,11 +85,12 @@ export default function CadastroForm() {
         }));
       }
     } catch (error) {
+      console.error('Erro ao criar usuário:', error);
+      return(
       toast({
         title: "Erro ao criar usuário.",
         description: "Ocorreu um erro ao tentar criar o usuário. Tente novamente."
-      });
-      console.error('Erro ao criar usuário:', error);
+      }))
     }
   };
 

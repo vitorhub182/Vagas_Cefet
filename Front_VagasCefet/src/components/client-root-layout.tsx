@@ -1,4 +1,3 @@
-// components/client-root-layout.tsx
 "use client";
 
 import { useRouter, usePathname } from 'next/navigation';
@@ -24,6 +23,8 @@ const ClientRootLayout: React.FC<ClientRootLayoutProps> = ({ children }) => {
   useEffect(() => {
     if (!isAuthenticated && pathname !== '/login' && pathname !== '/cadastro') {
       router.push('/login');
+    }else if (isAuthenticated && pathname === '/') {
+      router.push('/vagas');
     }
   }, [isAuthenticated, router, pathname]);
 

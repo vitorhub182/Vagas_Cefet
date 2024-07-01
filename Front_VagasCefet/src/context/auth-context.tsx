@@ -2,11 +2,13 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { authenticate } from '@/services/auth';
+import { authenticate } from '@/services/authService';
+import { toast } from '@/components/ui/use-toast';
+import { ToastProps } from '@/components/ui/toast';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean | ToastProps >;
   logout: () => void;
 }
 
@@ -33,12 +35,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return false;
       }else {
         setIsAuthenticated(true);
-        router.push('/');
+        router.push('/vagas');
         return true;
       }
     } catch (error) {
       console.error('Falha no login:', error);
-      throw new Error('Falha no login, consulte o suporte!')
+      return (toast({
+        variant: 'destructive',
+        title:'Falha na conexão com API'
+      }))
     }
   };
 
@@ -46,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('id');
     sessionStorage.removeItem('username');
+    sessionStorage.removeItem('role');
     setIsAuthenticated(false);
     router.push('/login');
   };
