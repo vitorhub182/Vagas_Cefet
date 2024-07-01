@@ -7,15 +7,22 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from '@/context/auth-context';
+import { toast } from "@/components/ui/use-toast";
 
 export default function LoginForm() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, password);
+    const log = await login(email, password);
+    if (log == false){
+      return (toast({
+        variant: 'destructive',
+        title: 'Credências inválidas'
+      }))
+    }
   };
 
   return (

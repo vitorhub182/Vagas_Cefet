@@ -1,10 +1,11 @@
-// layout.tsx
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientRootLayout from "@/components/client-root-layout";
 import { SidebarProvider } from "@/context/sidebar-context";
 import { AuthProvider } from "@/context/auth-context";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SidebarProvider>
             <ClientRootLayout>
               {children}
+              <Toaster />
             </ClientRootLayout>
           </SidebarProvider>
         </AuthProvider>

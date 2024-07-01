@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Sidebar from '@/components/sidebar';
 import { useSidebar } from '@/context/sidebar-context';
 import { useAuth } from '@/context/auth-context';
-import React, { useEffect } from 'react';
+import  { useEffect } from 'react';
 
 interface ClientRootLayoutProps {
   children: React.ReactNode;

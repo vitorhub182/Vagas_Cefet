@@ -1,15 +1,13 @@
 "use client";
-import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { string, z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -26,6 +24,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cadastroUsuario } from "@/services/cadastroService";
+import { FalhaCadastro } from "@/dto/cadastroUsuario";
+import { DescricaoUsuarioDTO } from "@/dto/descricaoUsuario";
+import { ToastAction } from "@/components/ui/toast";
+import { routeModule } from "next/dist/build/templates/pages";
+import { Router } from "lucide-react";
 
 const FormSchema = z.object({
   nome_completo: z.string().min(1, "Campo Nome não pode ser nulo."),
@@ -45,20 +48,45 @@ const FormSchema = z.object({
 type DataProps = z.infer<typeof FormSchema>;
 
 export default function CadastroForm() {
+
   const form = useForm<DataProps>({
     mode: 'onBlur',
-    resolver: zodResolver(FormSchema)
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      nome_completo: '',
+      email: '',
+      senha: '',
+      confirmarSenha: '',
+      role: '',
+      apelido: '',
+      resumo: '',
+      formacao: '',
+      exp_profissional: ''
+    }
   });
 
   async function onSubmit(data:DataProps) {
     const { confirmarSenha, ...formData } = data;
+
     try {
-      const cadastro = await cadastroUsuario(formData);
-      toast({
-        title: "Usuário criado com sucesso!",
-        description: "Você pode fazer login agora."
-      });
-      form.reset();
+      const resposta = await cadastroUsuario(formData);
+
+      if ('id' in resposta){
+        form.reset();
+        return (toast({
+          title: "Usuário criado com sucesso!",
+          description: "Você pode fazer login agora.",
+        })
+        );
+      } else {
+        const falha: FalhaCadastro = resposta;
+        
+        return (toast({
+          variant: "destructive",
+          title: "Usuário não criado, corrija:",
+          error: falha
+        }));
+      }
     } catch (error) {
       toast({
         title: "Erro ao criar usuário.",

@@ -1,5 +1,4 @@
 
-import Link from "next/link";
 import LoginForm from "./login-form";
 
 export default function LoginPage() {

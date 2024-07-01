@@ -19,8 +19,7 @@ export class AuthService {
         private reflector: Reflector,
         ) {}
 
-  async signIn(emailFornecido: string, pass: string): Promise<{ access_token: string }> {
-    console.log(pass, emailFornecido);
+  async signIn(emailFornecido: string, pass: string): Promise<{ access_token: string, id: string, apelido: string }> {
         
         const user = await this.usuarioRepository.findOne({where: { email: emailFornecido}});
         
@@ -34,7 +33,11 @@ export class AuthService {
           throw new UnauthorizedException();
         }
         const payload = { sub: user.id, emailFornecido: user.email };
-        return { access_token: await this.jwtService.signAsync(payload),};}
+        return { 
+          access_token: await this.jwtService.signAsync(payload),
+          id: user.id,
+          apelido: user.apelido
+        };}
           
   private async decryptText(encryptedString: string, senha: string) {
     const [ivBase64, encryptedBase64] = encryptedString.split(':');

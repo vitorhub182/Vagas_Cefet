@@ -1,4 +1,3 @@
-import CadastroForm from "@/app/cadastro/cadastro-form"
 
 export default function HomePage() {
     return(

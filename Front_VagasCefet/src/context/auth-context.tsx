@@ -1,12 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authenticate } from '@/services/auth';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -17,26 +17,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
+    const token = sessionStorage.getItem('access_token');
     if (token) {
       setIsAuthenticated(true);
     }
   }, []);
 
   const login = async (email: string, senha: string) => {
-    console.log(email,senha)
+    
     try {
-      await authenticate(email, senha);
-      setIsAuthenticated(true);
-      router.push('/');
+      const login = await authenticate(email, senha);
+      if (login == false){ 
+        console.error('Credências Incorretas');
+        setIsAuthenticated(false);
+        return false;
+      }else {
+        setIsAuthenticated(true);
+        router.push('/');
+        return true;
+      }
     } catch (error) {
       console.error('Falha no login:', error);
-      alert(error);
+      throw new Error('Falha no login, consulte o suporte!')
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('id');
+    sessionStorage.removeItem('username');
     setIsAuthenticated(false);
     router.push('/login');
   };

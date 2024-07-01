@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, MinLength } from "class-validator";
 import { EmailEhUnico } from "../validacao/emailUnico.validator";
 import { ValidRole } from "../validacao/tipoRole.validator";
 
