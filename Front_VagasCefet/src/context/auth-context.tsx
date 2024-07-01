@@ -35,8 +35,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return false;
       }else {
         setIsAuthenticated(true);
+
         router.push('/vagas');
-        return true;
+        return (toast({
+        variant: 'default',
+        title: 'Login realizado com Sucesso!'
+      }))
       }
     } catch (error) {
       console.error('Falha no login:', error);

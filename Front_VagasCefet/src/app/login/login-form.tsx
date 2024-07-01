@@ -27,6 +27,11 @@ export default function LoginForm() {
         variant: 'destructive',
         title: 'Falha ao se conectar com a API!'
       }))
+    }else {
+      return (toast({
+        variant: 'default',
+        title: 'Login realizado com Sucesso!'
+      }))
     }
   };
 
