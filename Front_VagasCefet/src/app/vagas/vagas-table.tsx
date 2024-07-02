@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/table"
 import { toast } from "@/components/ui/use-toast"
 import { listaVagas } from "@/services/vagasService"
+import { useRouter } from "next/navigation"
 
 
 
@@ -44,7 +45,7 @@ export type Vagas = {
   id: string
   titulo: string
   tipo: string
-  status: {1: "aberta"} | {2 : "fechada"}
+  status: number;
 }
 
 export const columns: ColumnDef<Vagas>[] = [
@@ -73,9 +74,12 @@ export const columns: ColumnDef<Vagas>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    cell: ({ row }) => {
+      const status = row.getValue("status");
+      const statusKey = status;
+      const formattedStatus = statusKey === "1" ? "aberta" : "fechada";
+      return <div className="capitalize">{formattedStatus}</div>;
+    },
   },
   {
     accessorKey: "titulo",
@@ -112,6 +116,7 @@ export const columns: ColumnDef<Vagas>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const vagas = row.original
+      const router = useRouter();
 
       return (
         <DropdownMenu>
@@ -127,7 +132,7 @@ export const columns: ColumnDef<Vagas>[] = [
               Copiar identificador da Vaga
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Detalhes da Vagas</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push(`/vagas/${vagas.id}`)}> Detalhes da Vagas</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
