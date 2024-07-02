@@ -12,10 +12,13 @@ export async function listaVagas() {
     });
   
     if (response.status == 401 ) {
-      return false;
+      
+      const dados: any  = [];
+      return dados; 
 
     }else if (response.status == 200){
       const dados: ListaVagasDTO = await response.json();
+      console.log(dados);
       return dados;
     }else {
       throw new Error('Falha ao registrar usuario');
