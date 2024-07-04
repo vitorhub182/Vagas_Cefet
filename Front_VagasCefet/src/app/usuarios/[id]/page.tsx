@@ -1,0 +1,52 @@
+"use client"
+import { toast } from '@/components/ui/use-toast';
+import { DescricaoUsuarioDTO } from '@/dto/usuarios';
+import { descricaoUsuario } from '@/services/usuariosService';
+import React from 'react';
+
+
+export default function UsuarioPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const [data, setData] = React.useState<DescricaoUsuarioDTO>();
+  React.useEffect(() => {
+    async function fetchData() {
+      try {
+        const usuario = await descricaoUsuario(id);
+        setData(usuario);
+        return (toast({
+          variant: 'default',
+          title: 'Descrição de usuario consultada com sucesso!'
+        }))
+      } catch (error) {
+        console.error("Falha conexão com a API: ", error);
+        return (toast({
+          variant: 'destructive',
+          title: 'Falha ao se conectar com a API para carregar a descrição!'
+        }))
+        
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <h3 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+      {data?.nome_completo}
+      </h3>
+      <p className="leading-7 [&:not(:first-child)]:mt-6">
+        Resumo profissional: {data?.resumo}
+      </p>
+      <p>
+        Situação atual da inscrição: {data?.email}
+      </p>
+      <p className="leading-7 [&:not(:first-child)]:mt-6"> 
+      Experiência profissional: {data?.exp_profissional}
+      </p>
+      <p className="leading-7 [&:not(:first-child)]:mt-6">
+        Formação acadêmica: {data?.formacao}
+      </p>
+    </div>
+  );
+}

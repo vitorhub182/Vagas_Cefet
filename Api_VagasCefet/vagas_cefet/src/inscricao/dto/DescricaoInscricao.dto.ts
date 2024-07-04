@@ -1,9 +1,6 @@
-import { UsuarioEntity } from "src/usuario/usuario.entity";
-import { VagaEntity } from "src/vaga/vaga.entity";
-
 export class DescricaoInscricaoDTO  {
     readonly id: string;
-    readonly status: string;
+    readonly status: number;
     readonly visto: boolean;
     readonly alunoId: string;
     readonly vagaId: string;
@@ -12,7 +9,7 @@ export class DescricaoInscricaoDTO  {
 
     constructor(inscricao: {
         id: string,
-        status: string;
+        status: number;
         visto: boolean;
         alunoId: string;
         vagaId: string;

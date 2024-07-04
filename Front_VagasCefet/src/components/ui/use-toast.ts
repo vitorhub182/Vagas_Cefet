@@ -7,7 +7,7 @@ import type {
   ToastActionElement,
   ToastProps,
 } from "@/components/ui/toast"
-import { FalhaCadastro } from "@/dto/usuario"
+import { FalhaCadastroDTO } from "@/dto/usuarios"
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
@@ -17,7 +17,7 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
-  error?: FalhaCadastro
+  error?: FalhaCadastroDTO
 }
 
 const actionTypes = {

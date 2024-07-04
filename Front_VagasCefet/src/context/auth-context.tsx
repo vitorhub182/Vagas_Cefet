@@ -3,12 +3,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authenticate } from '@/services/authService';
-import { toast } from '@/components/ui/use-toast';
-import { ToastProps } from '@/components/ui/toast';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean | ToastProps >;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -25,29 +23,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (email: string, senha: string) => {
+  const login = async (email: string, senha: string) =>  {
     
     try {
       const login = await authenticate(email, senha);
-      if (login == false){ 
+      if (login === false){ 
         console.error('Credências Incorretas');
         setIsAuthenticated(false);
         return false;
-      }else {
+      }else if (login === true) {
         setIsAuthenticated(true);
 
         router.push('/vagas');
-        return (toast({
-        variant: 'default',
-        title: 'Login realizado com Sucesso!'
-      }))
+        return true;
+      } else {
+        return false;
       }
     } catch (error) {
       console.error('Falha no login:', error);
-      return (toast({
-        variant: 'destructive',
-        title:'Falha na conexão com API'
-      }))
+      return false;
     }
   };
 

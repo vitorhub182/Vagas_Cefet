@@ -6,7 +6,6 @@ import { VagaService } from "./vaga.service";
 import { AuthGuard } from "src/auth/auth.guard";
 import { Roles } from "src/decorators/roles.decorator";
 import { Role } from "src/enums/role.enum";
-import { RolesGuard } from "src/auth/roles.guard";
 import { DescricaoVagaDTO } from "./dto/DescricaoVaga.dto";
 
 @Controller('/vagas')
@@ -34,7 +33,7 @@ export class VagaController{
         const vagasListaDTO = vagasLista.map(
             vaga => new ListaVagaDTO(vaga)
         )
-        return  vagasListaDTO
+        return  vagasListaDTO   
     }
 
 

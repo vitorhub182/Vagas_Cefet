@@ -5,13 +5,13 @@ export class ListaInscricoesDTO  {
     readonly id: string;
     readonly alunoId: string;
     readonly vagaId: string;
-    readonly status: string;
+    readonly status: number;
 
     constructor(inscricao: {
         id: string,
         alunoId: string,
-        vagaId: string
-        status: string,
+        vagaId: string,
+        status: number,
 
     }) {
         this.id = inscricao.id;

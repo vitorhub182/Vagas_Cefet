@@ -1,12 +1,12 @@
-import { DescricaoVagaDTO, ListaVagasDTO } from "@/dto/vagas";
+import { DescricaoInscricaoDTO, ListaInscricoesDTO } from "@/dto/inscricoes";
 
-export async function listaVagas() {
+export async function listaInscricoes() {
   const token = sessionStorage.getItem('access_token');
   if (!token){
     throw new Error('Token não encontrado!')
   }
   try{
-    const response = await fetch('http://localhost:3002/vagas/', {
+    const response = await fetch('http://localhost:3002/inscricoes/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -20,11 +20,11 @@ export async function listaVagas() {
       return dados; 
 
     }else if (response.status == 200){
-      const dados: ListaVagasDTO = await response.json();
+      const dados: ListaInscricoesDTO = await response.json();
       console.log(dados);
       return dados;
     }else {
-      throw new Error('Falha ao listar vaga');
+      throw new Error('Falha ao listar inscrições');
     }
   } catch (error){
     console.log(error);
@@ -32,13 +32,13 @@ export async function listaVagas() {
   }
   }
 
-  export async function descricaoVaga(id : string) {
+  export async function descricaoInscricao(id : string) {
     const token = sessionStorage.getItem('access_token');
     if (!token){
       throw new Error('Token não encontrado!')
     }
     try{
-      const response = await fetch(`http://localhost:3002/vagas/${id}`, {
+      const response = await fetch(`http://localhost:3002/inscricoes/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -52,11 +52,11 @@ export async function listaVagas() {
         return dados; 
   
       }else if (response.status == 200){
-        const dados: DescricaoVagaDTO = await response.json();
+        const dados: DescricaoInscricaoDTO = await response.json();
         console.log(dados);
         return dados;
       }else {
-        throw new Error('Falha ao apresentar descrição de vagas');
+        throw new Error('Falha ao apresentar descrição de inscrição');
       }
     } catch (error){
       console.log(error);

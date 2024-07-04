@@ -1,10 +1,10 @@
-import { VagasTable } from "./vagas-table"
+import { InscricoesTable } from "./inscricoes-table"
 
 export default async function VagasPage() {
 
   return (
     <div >
-      <VagasTable/>
+      <InscricoesTable/>
     </div>
   )
 }

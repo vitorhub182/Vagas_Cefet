@@ -1,6 +1,6 @@
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
 import { VagaEntity } from 'src/vaga/vaga.entity';
-import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, IntegerType, TableForeignKey, ManyToOne, JoinColumn, ManyToMany} from 'typeorm'
+import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn,ManyToOne, JoinColumn} from 'typeorm'
 
 @Entity({name: 'inscricoes'})
 export class InscricaoEntity {
@@ -9,7 +9,7 @@ export class InscricaoEntity {
     id: string;
   
     @Column({ type: 'varchar', length: 20 })
-    status: string;
+    status: number;
   
     @Column({ type: 'boolean', default: false })
     visto: boolean;

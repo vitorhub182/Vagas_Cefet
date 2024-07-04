@@ -6,6 +6,7 @@ import {
   Bell,
   LockKeyhole,
   UserCheck,
+  Ticket,
   LogOut } from "lucide-react";
 
   import SidebarItem from "./item";
@@ -42,13 +43,18 @@ const items: ISidebarItem[] = [
     icon: UserCheck,
   },
   {
+    name: "Inscricoes",
+    path: "/inscricoes",
+    icon: Ticket, 
+  },
+  {
     name: "Notificações",
     path: "/notificacao",
     icon: Bell,
   },
   {
-    name: "Perfil",
-    path: "/perfil",
+    name: "Usuarios",
+    path: "/usuarios",
     icon: CircleUserRound,
   },
   {

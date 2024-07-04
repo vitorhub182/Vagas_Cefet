@@ -1,6 +1,6 @@
-import { IsEmail, IsNotEmpty, IsOptional, MinLength } from "class-validator";
+import { IsNotEmpty, IsOptional } from "class-validator";
 import { UsuarioEntity } from "src/usuario/usuario.entity";
-import { IntegerType } from "typeorm";
+
 
 export class AtualizaVagaDTO {
 

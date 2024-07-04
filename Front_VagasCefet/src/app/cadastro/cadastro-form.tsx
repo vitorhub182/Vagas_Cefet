@@ -23,8 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cadastroUsuario } from "@/services/cadastroService";
-import { FalhaCadastro } from "@/dto/usuario";
+import { cadastroUsuario } from "@/services/usuariosService";
+import { FalhaCadastroDTO } from "@/dto/usuarios";
 
 
 const FormSchema = z.object({
@@ -76,7 +76,7 @@ export default function CadastroForm() {
         })
         );
       } else {
-        const falha: FalhaCadastro = resposta;
+        const falha: FalhaCadastroDTO = resposta;
         
         return (toast({
           variant: "destructive",

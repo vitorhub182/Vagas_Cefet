@@ -36,19 +36,19 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { toast } from "@/components/ui/use-toast"
-import { listaVagas } from "@/services/vagasService"
+import { listaUsuarios } from "@/services/usuariosService"
 import { useRouter } from "next/navigation"
 
 
 
-export type Vagas = {
+export type Usuarios = {
   id: string
   titulo: string
   tipo: string
   status: number;
 }
 
-export const columns: ColumnDef<Vagas>[] = [
+export const columns: ColumnDef<Usuarios>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -115,7 +115,7 @@ export const columns: ColumnDef<Vagas>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const vagas = row.original
+      const usuarios = row.original
       const router = useRouter();
 
       return (
@@ -128,11 +128,11 @@ export const columns: ColumnDef<Vagas>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(vagas.id)}>
-              Copiar identificador da Vaga
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(usuarios.id)}>
+              Copiar identificador do Usuario
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push(`/vagas/${vagas.id}`)}> Detalhes da Vagas</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push(`/usuarios/${usuarios.id}`)}> Detalhes do Usuarios</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -140,8 +140,8 @@ export const columns: ColumnDef<Vagas>[] = [
   },
 ]
 
-export function VagasTable() {
-  const [data, setData] = React.useState<Vagas[]>([]);
+export function UsuariosTable() {
+  const [data, setData] = React.useState<Usuarios[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -153,11 +153,11 @@ export function VagasTable() {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const vagasData = await listaVagas();
-        setData(vagasData);
+        const usuariosData = await listaUsuarios();
+        setData(usuariosData);
         return (toast({
           variant: 'default',
-          title: 'Lista de vagas consultada com sucesso!'
+          title: 'Lista de usuarios consultada com sucesso!'
         }))
       } catch (error) {
         console.error("Falha conexão com a API: ", error);

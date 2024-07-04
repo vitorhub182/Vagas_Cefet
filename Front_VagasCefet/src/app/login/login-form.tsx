@@ -17,20 +17,20 @@ export default function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const log = await login(email, password);
-    if (log == false){
+    if (log === false){
       return (toast({
         variant: 'destructive',
         title: 'Credências inválidas'
       }))
-    } else if (!log) {
-      return (toast({
-        variant: 'destructive',
-        title: 'Falha ao se conectar com a API!'
-      }))
-    }else {
+    } else if (log === true) {
       return (toast({
         variant: 'default',
         title: 'Login realizado com Sucesso!'
+      }))
+    }else {
+      return (toast({
+        variant: 'destructive',
+        title: 'Falha ao se conectar com a API!'
       }))
     }
   };

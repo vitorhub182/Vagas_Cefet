@@ -36,19 +36,19 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { toast } from "@/components/ui/use-toast"
-import { listaVagas } from "@/services/vagasService"
+import { listaInscricoes } from "@/services/inscricoesService"
 import { useRouter } from "next/navigation"
 
 
 
-export type Vagas = {
+export type Inscricoes = {
   id: string
   titulo: string
   tipo: string
   status: number;
 }
 
-export const columns: ColumnDef<Vagas>[] = [
+export const columns: ColumnDef<Inscricoes>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -75,9 +75,24 @@ export const columns: ColumnDef<Vagas>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue("status");
-      const statusKey = status;
-      const formattedStatus = statusKey === "1" ? "aberta" : "fechada";
+      const status: number = row.getValue("status");
+      
+      let formattedStatus;
+        switch (status) {
+          case 0:
+            formattedStatus =  'Em avaliação';
+            break;
+          case 1:
+            formattedStatus =  'Reprovado';
+            break;
+          case 2:
+            formattedStatus = 'Aprovado';
+            break;
+          default:
+            formattedStatus =  'Desconhecido';
+            break;
+        };
+      
       return <div className="capitalize">{formattedStatus}</div>;
     },
   },
@@ -115,7 +130,7 @@ export const columns: ColumnDef<Vagas>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const vagas = row.original
+      const inscricoes = row.original
       const router = useRouter();
 
       return (
@@ -128,11 +143,11 @@ export const columns: ColumnDef<Vagas>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(vagas.id)}>
-              Copiar identificador da Vaga
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(inscricoes.id)}>
+              Copiar identificador da Inscrição
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push(`/vagas/${vagas.id}`)}> Detalhes da Vagas</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push(`/inscricoes/${inscricoes.id}`)}> Detalhes da Inscrição</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -140,8 +155,8 @@ export const columns: ColumnDef<Vagas>[] = [
   },
 ]
 
-export function VagasTable() {
-  const [data, setData] = React.useState<Vagas[]>([]);
+export function InscricoesTable() {
+  const [data, setData] = React.useState<Inscricoes[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -153,11 +168,11 @@ export function VagasTable() {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const vagasData = await listaVagas();
-        setData(vagasData);
+        const inscricoesDados = await listaInscricoes();
+        setData(inscricoesDados);
         return (toast({
           variant: 'default',
-          title: 'Lista de vagas consultada com sucesso!'
+          title: 'Lista de inscricoes  consultada com sucesso!'
         }))
       } catch (error) {
         console.error("Falha conexão com a API: ", error);

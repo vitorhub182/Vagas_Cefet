@@ -66,7 +66,7 @@ export class InscricaoService{
 
             const inscricaoNova = new InscricaoEntity;
 
-            inscricaoNova.status = "em avaliação";
+            inscricaoNova.status = 0;
             inscricaoNova.visto = false;
             inscricaoNova.vaga = vaga;
             inscricaoNova.usuario = aluno;

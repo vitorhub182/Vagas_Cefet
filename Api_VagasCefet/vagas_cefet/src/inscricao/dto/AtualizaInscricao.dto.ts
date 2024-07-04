@@ -5,7 +5,7 @@ export class AtualizaInscricaoDTO {
 
     @IsOptional()
     @IsNotEmpty({message: "Campo 'status' não pode ser vazio"})
-    status: string;
+    status: number;
     
     @IsOptional()
     @IsNotEmpty({message: "Campo 'visto' não pode ser vazio"})

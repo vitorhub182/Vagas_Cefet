@@ -1,6 +1,6 @@
 import { InscricaoEntity } from 'src/inscricao/inscricao.entity';
 import { VagaEntity } from 'src/vaga/vaga.entity';
-import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, OneToMany, JoinColumn} from 'typeorm'
+import {Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, OneToMany} from 'typeorm'
 
 @Entity({name: 'usuarios'})
 export class UsuarioEntity {
@@ -45,6 +45,6 @@ export class UsuarioEntity {
     @OneToMany(() => VagaEntity, (vaga) => vaga.usuario)
     vaga: VagaEntity[];
 
-    @OneToMany(() => InscricaoEntity, (inscricao) => inscricao.usuario)
+    @OneToMany(() => InscricaoEntity, (inscricao) => inscricao.usuario,  { cascade: true, onDelete: 'CASCADE' })
     inscricoes: InscricaoEntity[];
 }

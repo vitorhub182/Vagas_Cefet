@@ -1,4 +1,4 @@
-export async function authenticate(email: string, senha: string) {
+export async function authenticate(email: string, senha: string): Promise<boolean|string> {
 
   try { 
     const response = await fetch('http://localhost:3002/login/', {
@@ -16,12 +16,13 @@ export async function authenticate(email: string, senha: string) {
       sessionStorage.setItem('id', data.id);
       sessionStorage.setItem('username', data.apelido);
       sessionStorage.setItem('role', data.role);
-      return data.access_token;  
+      return true;  
     }else {
       return false;
     }
-  } catch {
-    throw new Error('Falha ao se conectar com a api');
+  } catch (error){
+    console.log("Falha ao se conectar com a api")
+    return false;
   }
 
 }

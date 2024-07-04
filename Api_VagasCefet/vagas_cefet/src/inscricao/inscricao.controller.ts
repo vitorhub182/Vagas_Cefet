@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Headers, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Headers, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { ListaInscricoesDTO } from "./dto/ListaInscricoes.dto";
 import { AtualizaInscricaoDTO } from "./dto/AtualizaInscricao.dto";
 import { InscricaoService } from "./inscricao.service";

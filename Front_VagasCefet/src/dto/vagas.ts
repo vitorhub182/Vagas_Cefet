@@ -1,5 +1,5 @@
 
-export interface DescricaoVagasDTO {
+export interface DescricaoVagaDTO {
     id: string,
     titulo: string;
     contratante: string;
