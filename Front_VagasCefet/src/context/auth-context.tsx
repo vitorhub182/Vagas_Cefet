@@ -6,6 +6,7 @@ import { authenticate } from '@/services/authService';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
+  isTeacher: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
@@ -14,6 +15,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isTeacher, setisTeacher] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,12 +29,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     try {
       const login = await authenticate(email, senha);
-      if (login === false){ 
+      if (login.auth === false){ 
         console.error('Credências Incorretas');
         setIsAuthenticated(false);
         return false;
-      }else if (login === true) {
+      }else if (login.auth === true) {
         setIsAuthenticated(true);
+        setisTeacher(login.isTeacher)
 
         router.push('/vagas');
         return true;
@@ -55,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isTeacher, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

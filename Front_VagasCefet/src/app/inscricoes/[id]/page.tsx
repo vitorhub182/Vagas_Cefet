@@ -2,7 +2,6 @@
 import { toast } from '@/components/ui/use-toast';
 import { DescricaoInscricaoDTO } from '@/dto/inscricoes';
 import { descricaoInscricao } from '@/services/inscricoesService';
-import { descricaoVaga } from '@/services/vagasService';
 import React from 'react';
 
 
@@ -52,7 +51,8 @@ export default function InscricaoPage({ params }: { params: { id: string } }) {
       <p>
         Situação atual da inscrição: { getStatusLabel(data?.status) }
       </p>
-      <p className="leading-7 [&:not(:first-child)]:mt-6"> da inscrição: {data?.createdAt}
+      <p className="leading-7 [&:not(:first-child)]:mt-6"> 
+        Data da inscrição: {data?.createdAt}
       </p>
       <p className="leading-7 [&:not(:first-child)]:mt-6">
         Data última atualização de status da inscrição: {data?.updatedAt}

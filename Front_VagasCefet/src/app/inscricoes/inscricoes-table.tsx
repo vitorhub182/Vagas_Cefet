@@ -38,6 +38,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { listaInscricoes } from "@/services/inscricoesService"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/context/auth-context"
 
 
 
@@ -50,7 +51,7 @@ export type Inscricoes = {
 
 export const columns: ColumnDef<Inscricoes>[] = [
   {
-    id: "select",
+    id: "Selecione",
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -58,14 +59,14 @@ export const columns: ColumnDef<Inscricoes>[] = [
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
+        aria-label="Selecione todos"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
+        aria-label="Selecione a linha"
       />
     ),
     enableSorting: false,
@@ -97,34 +98,34 @@ export const columns: ColumnDef<Inscricoes>[] = [
     },
   },
   {
-    accessorKey: "titulo",
+    accessorKey: "aluno",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Titulo
+          Aluno
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("titulo")}</div>,
+    cell: ({ row }) => <div>{row.getValue("aluno")}</div>,
   },
   {
-    accessorKey: "tipo",
+    accessorKey: "vaga",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Tipo
+          Vaga
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("tipo")}</div>,
+    cell: ({ row }) => <div>{row.getValue("vaga")}</div>,
   },
   {
     id: "actions",
@@ -156,6 +157,7 @@ export const columns: ColumnDef<Inscricoes>[] = [
 ]
 
 export function InscricoesTable() {
+  const { isTeacher } = useAuth();
   const [data, setData] = React.useState<Inscricoes[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -168,6 +170,12 @@ export function InscricoesTable() {
   React.useEffect(() => {
     async function fetchData() {
       try {
+        if (isTeacher === false) { 
+          return (toast({
+            variant: 'destructive',
+            title: 'Alunos não possuem autorização para acessar essa lista!'
+          }))  
+        }
         const inscricoesDados = await listaInscricoes();
         setData(inscricoesDados);
         return (toast({
@@ -210,10 +218,10 @@ export function InscricoesTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filtre pelo Titulo..."
-          value={(table.getColumn("titulo")?.getFilterValue() as string) ?? ""}
+          placeholder="Filtre pela Vaga..."
+          value={(table.getColumn("vaga")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("titulo")?.setFilterValue(event.target.value)
+            table.getColumn("vaga")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

@@ -38,6 +38,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { listaUsuarios } from "@/services/usuariosService"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/context/auth-context"
 
 
 
@@ -50,7 +51,7 @@ export type Usuarios = {
 
 export const columns: ColumnDef<Usuarios>[] = [
   {
-    id: "select",
+    id: "Selecione",
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -58,58 +59,48 @@ export const columns: ColumnDef<Usuarios>[] = [
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
+        aria-label="Selecione todos"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
+        aria-label="Selecione a linha"
       />
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => {
-      const status = row.getValue("status");
-      const statusKey = status;
-      const formattedStatus = statusKey === "1" ? "aberta" : "fechada";
-      return <div className="capitalize">{formattedStatus}</div>;
-    },
-  },
-  {
-    accessorKey: "titulo",
+    accessorKey: "nome_completo",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Titulo
+          Nome Completo
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("titulo")}</div>,
+    cell: ({ row }) => <div>{row.getValue("nome_completo")}</div>,
   },
   {
-    accessorKey: "tipo",
+    accessorKey: "email",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Tipo
+          E-mail
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("tipo")}</div>,
+    cell: ({ row }) => <div>{row.getValue("email")}</div>,
   },
   {
     id: "actions",
@@ -141,6 +132,7 @@ export const columns: ColumnDef<Usuarios>[] = [
 ]
 
 export function UsuariosTable() {
+  const { isTeacher } = useAuth();
   const [data, setData] = React.useState<Usuarios[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -153,6 +145,13 @@ export function UsuariosTable() {
   React.useEffect(() => {
     async function fetchData() {
       try {
+        
+        if (isTeacher === false) {
+          return (toast({
+            variant: 'destructive',
+            title: 'Alunos não possuem autorização para acessar essa lista!'
+          }))
+        }
         const usuariosData = await listaUsuarios();
         setData(usuariosData);
         return (toast({
@@ -195,10 +194,10 @@ export function UsuariosTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filtre pelo Titulo..."
-          value={(table.getColumn("titulo")?.getFilterValue() as string) ?? ""}
+          placeholder="Filtre pelo Nome..."
+          value={(table.getColumn("nome_completo")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("titulo")?.setFilterValue(event.target.value)
+            table.getColumn("nome_completo")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

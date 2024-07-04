@@ -11,6 +11,7 @@ import {
 
   import SidebarItem from "./item";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/auth-context";
 
 interface ISidebarItem {
   name: string;
@@ -32,11 +33,12 @@ const logout: ISidebarItem[] = [
   }
 ]
 const items: ISidebarItem[] = [
-  {
+  /*{
     name: "Minha Área",
     path: "/myArea",
     icon: House,
   },
+  */
   {
     name: "Vagas",
     path: "/vagas",
@@ -48,14 +50,14 @@ const items: ISidebarItem[] = [
     icon: Ticket, 
   },
   {
-    name: "Notificações",
-    path: "/notificacao",
-    icon: Bell,
-  },
-  {
     name: "Usuarios",
     path: "/usuarios",
     icon: CircleUserRound,
+  },
+  {
+    name: "Notificações",
+    path: "/notificacao",
+    icon: Bell,
   },
   {
     name: "Conta",
@@ -78,6 +80,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
+  const {isTeacher} = useAuth();
 
   const [username, setUsername] = useState('');
   useEffect(() => {
@@ -93,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
       <div className="flex flex-col space-y-10 w-full">
         <img className="h-20 w-fit" src="/logo-expanded.png" alt="Logo" />
         <div className="text-left font-bold">
-          Seja bem vindo! {username}
+          Portal do {isTeacher === false ? 'Aluno' : 'Professor'}: {username}
         </div>
         <div className="flex flex-col space-y-2">
           {items.map((item, index) => (

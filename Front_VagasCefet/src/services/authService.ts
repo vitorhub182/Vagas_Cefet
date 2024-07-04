@@ -1,4 +1,6 @@
-export async function authenticate(email: string, senha: string): Promise<boolean|string> {
+import { useState } from "react";
+
+export async function authenticate(email: string, senha: string): Promise<any> {
 
   try { 
     const response = await fetch('http://localhost:3002/login/', {
@@ -16,13 +18,22 @@ export async function authenticate(email: string, senha: string): Promise<boolea
       sessionStorage.setItem('id', data.id);
       sessionStorage.setItem('username', data.apelido);
       sessionStorage.setItem('role', data.role);
-      return true;  
+      return { 
+        auth: true,
+        isTeacher: (data.role === 'professor' ? true : false),
+      };  
     }else {
-      return false;
+      return { 
+        auth: false,
+        isTeacher: false,
+      };
     }
   } catch (error){
     console.log("Falha ao se conectar com a api")
-    return false;
+    return { 
+      auth: false,
+      isTeacher: false,
+    };
   }
 
 }

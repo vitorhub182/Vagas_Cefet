@@ -8,7 +8,7 @@ export class InscricaoEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
   
-    @Column({ type: 'varchar', length: 20 })
+    @Column({name: 'status', nullable: false})
     status: number;
   
     @Column({ type: 'boolean', default: false })
