@@ -28,6 +28,7 @@ export class AtualizaVagaDTO {
     status: number;
 
     @IsOptional()
-    usuario: UsuarioEntity;
+    @IsNotEmpty({message: "Campo 'professorId' não pode ser vazio"})
+    professorId: string;
 
 }

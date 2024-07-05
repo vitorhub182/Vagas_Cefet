@@ -19,9 +19,9 @@ export class VagaController{
     @UseGuards(AuthGuard)
     @Roles(Role.Professor)
     @Post()
-    async criaVaga(@Headers('authorization') authHeader: string,@Body() dadosDaVaga: CriaVagaDTO) {
+    async criaVaga(@Body() dadosDaVaga: CriaVagaDTO) {
 
-        const vagaSalva = await this.vagaService.salvar(dadosDaVaga,authHeader,);
+        const vagaSalva = await this.vagaService.salvar(dadosDaVaga);
         return new DescricaoVagaDTO(vagaSalva)
     }
 

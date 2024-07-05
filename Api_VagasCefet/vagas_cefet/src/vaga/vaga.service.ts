@@ -54,10 +54,9 @@ export class VagaService{
         }
     }
 
-    async salvar(dadosVaga: CriaVagaDTO, authHeader: string){
+    async salvar(dadosVaga: CriaVagaDTO){
 
         try{
-            dadosVaga.usuario = await this.jwtTranslate.translateJWT(authHeader)
             const vagaSalva = await this.vagaRepository.save(dadosVaga);
             return vagaSalva;
 

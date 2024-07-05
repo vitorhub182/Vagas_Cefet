@@ -5,6 +5,8 @@ import { Repository } from "typeorm";
 import { ConfigService } from "@nestjs/config";
 import { TranslateJWT } from "src/jwtTranslate/jwtTranslateToId";
 import { VagaEntity } from "src/vaga/vaga.entity";
+import { CriaInscricaoDTO } from "./dto/CriaInscricao.dto";
+import { UsuarioEntity } from "src/usuario/usuario.entity";
 
 @Injectable()
 export class InscricaoService{
@@ -13,6 +15,8 @@ export class InscricaoService{
     private readonly inscricaoRepository: Repository<InscricaoEntity>,
     @InjectRepository(VagaEntity) // alinhar repository ao entity
     private readonly vagaRepository: Repository<VagaEntity>,
+    @InjectRepository(UsuarioEntity) // alinhar repository ao entity
+    private readonly usuarioRepository: Repository<UsuarioEntity>,
 
     private jwtTranslate: TranslateJWT,
     private configService: ConfigService
@@ -52,16 +56,14 @@ export class InscricaoService{
               throw error;
             }
             console.log(error);
-            throw new InternalServerErrorException('Erro ao listar inscricaos');
+            throw new InternalServerErrorException('Erro ao listar inscricoes');
         }
     }
 
-    async salvar(authHeader: string,vagaId: string){
+    async salvar(dadosInscricao: CriaInscricaoDTO){
         try{
-            const aluno = await this.jwtTranslate.translateJWT(authHeader);
-            const vaga = await this.vagaRepository.findOne({
-                where: { id: vagaId}
-            });
+            const aluno = await this.usuarioRepository.findOne({where: {id: dadosInscricao.alunoId}})
+            const vaga =  await this.vagaRepository.findOne({where: {id: dadosInscricao.vagaId}})
             if (!vaga){ throw new NotFoundException }
 
             const inscricaoNova = new InscricaoEntity;

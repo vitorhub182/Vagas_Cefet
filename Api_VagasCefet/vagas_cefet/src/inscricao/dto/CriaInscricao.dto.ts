@@ -13,9 +13,9 @@ export class CriaInscricaoDTO {
     @IsNotEmpty({message: "Campo 'visto' não pode ser vazio"})
     visto: boolean;
 
-    @IsOptional()
-    usuario: UsuarioEntity
+    @IsNotEmpty({message: "Campo 'usuarioId' não pode ser vazio"})
+    alunoId: string
 
-    @IsOptional()
-    vaga: VagaEntity
+    @IsNotEmpty({message: "Campo 'vagaId' não pode ser vazio"})
+    vagaId: string
 }

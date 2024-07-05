@@ -6,6 +6,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { Roles } from "src/decorators/roles.decorator";
 import { Role } from "src/enums/role.enum";
 import { DescricaoInscricaoDTO } from "./dto/DescricaoInscricao.dto";
+import { CriaInscricaoDTO } from "./dto/CriaInscricao.dto";
 
 @Controller('/inscricoes')
 
@@ -17,10 +18,10 @@ export class InscricaoController{
 
     @UseGuards(AuthGuard)
     @Roles(Role.Aluno)
-    @Post('/:id')
-    async criaInscricao(@Headers('authorization') authHeader: string,@Param('id') vagaId: string) {
+    @Post('/')
+    async criaInscricao(@Body() dadosInscricao: CriaInscricaoDTO) {
 
-        const inscricaoSalva = await this.inscricaoService.salvar(authHeader, vagaId);
+        const inscricaoSalva = await this.inscricaoService.salvar(dadosInscricao);
         return new DescricaoInscricaoDTO(inscricaoSalva)
     }
 

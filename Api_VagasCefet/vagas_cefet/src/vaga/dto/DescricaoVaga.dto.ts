@@ -1,5 +1,3 @@
-import { UsuarioEntity } from "src/usuario/usuario.entity";
-import { IntegerType } from "typeorm";
 
 export class DescricaoVagaDTO  {
     readonly id: string;
