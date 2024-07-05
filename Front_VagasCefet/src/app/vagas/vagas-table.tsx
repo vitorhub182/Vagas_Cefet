@@ -38,6 +38,8 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { listaVagas } from "@/services/vagasService"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { useAuth } from "@/context/auth-context"
 
 
 
@@ -138,9 +140,31 @@ export const columns: ColumnDef<Vagas>[] = [
       )
     },
   },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const vagas = row.original
+      const {isTeacher} = useAuth();
+      const router = useRouter()  
+
+      return (
+        <DropdownMenu>
+          {!isTeacher && (
+                      <Button
+                      className="text-center mt-3" variant={'default'}
+                      onClick={() => router.push(`/vagas/${vagas.id}`)}
+                      > Inscrever-se</Button>
+                  )}
+        </DropdownMenu>
+      )
+    },
+  },
 ]
 
 export function VagasTable() {
+  const {isTeacher} = useAuth();
+  const router = useRouter();
   const [data, setData] = React.useState<Vagas[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -203,10 +227,18 @@ export function VagasTable() {
           className="max-w-sm"
         />
         <DropdownMenu>
+        {isTeacher && (
+        <Button
+              className="ml-4"
+              onClick={() => router.push('/vagas/nova')}
+            > Criar uma Vaga</Button>
+        )}
           <DropdownMenuTrigger asChild>
+          
             <Button variant="outline" className="ml-auto">
               Columns <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
+            
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table
@@ -256,6 +288,7 @@ export function VagasTable() {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
+                  
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -264,7 +297,9 @@ export function VagasTable() {
                       )}
                     </TableCell>
                   ))}
+                  
                 </TableRow>
+                
               ))
             ) : (
               <TableRow>

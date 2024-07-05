@@ -16,3 +16,14 @@ export interface ListaVagasDTO {
     tipo: string;
     status: number;
 }
+
+export interface CriaVagaDTO {
+    
+    titulo: string;    
+    contratante: string;
+    tipo: string;
+    requisitos: string;
+    detalhes?: string;
+    status: number;
+    professorId: string;
+}

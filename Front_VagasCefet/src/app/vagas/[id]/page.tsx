@@ -1,6 +1,10 @@
 "use client"
+import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
+import { useAuth } from '@/context/auth-context';
+import { CriaInscricaoDTO } from '@/dto/inscricoes';
 import { DescricaoVagaDTO } from '@/dto/vagas';
+import { cadastroInscricao } from '@/services/inscricoesService';
 import { descricaoVaga } from '@/services/vagasService';
 import React from 'react';
 
@@ -8,6 +12,17 @@ import React from 'react';
 export default function VagaPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const [data, setData] = React.useState<DescricaoVagaDTO>();
+  const alunoId = sessionStorage.getItem('id') || '';
+  
+  const dadosCriaInscricao: CriaInscricaoDTO = {
+    alunoId: alunoId,
+    vagaId: id,
+  }
+  const {isTeacher} = useAuth();
+
+
+
+
   React.useEffect(() => {
     async function fetchData() {
       try {
@@ -25,10 +40,33 @@ export default function VagaPage({ params }: { params: { id: string } }) {
         }))
         
       }
-    }
-
-    fetchData();
+    }fetchData();
+    
   }, []);
+  async function inscricao() {
+    try {
+      if (isTeacher === true) { 
+        return (toast({
+          variant: 'destructive',
+          title: 'Professor não pode inscrever-se!'
+        }))  
+      }
+
+      await cadastroInscricao(dadosCriaInscricao);
+
+      return (toast({
+        variant: 'default',
+        title: 'Inscrição feita com sucesso!'
+      }))
+    } catch (error) {
+      console.error("Falha conexão com a API: ", error);
+      return (toast({
+        variant: 'destructive',
+        title: 'Falha ao se conectar com a API para executar a inscrição!'
+      }))
+      
+    }
+  }
 
   return (
     <div>
@@ -59,6 +97,14 @@ export default function VagaPage({ params }: { params: { id: string } }) {
       <p className="leading-7 [&:not(:first-child)]:mt-6">
         {data?.contratante}
       </p>
+      <div>
+      {!isTeacher && (
+                      <Button
+                      className="text-center mt-3" variant={'default'}
+                      onClick={() => (inscricao())}
+                      > Inscrever-se</Button>
+                  )}
+      </div>
     </div>
   );
 }

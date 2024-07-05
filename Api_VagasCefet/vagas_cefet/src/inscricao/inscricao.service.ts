@@ -7,6 +7,7 @@ import { TranslateJWT } from "src/jwtTranslate/jwtTranslateToId";
 import { VagaEntity } from "src/vaga/vaga.entity";
 import { CriaInscricaoDTO } from "./dto/CriaInscricao.dto";
 import { UsuarioEntity } from "src/usuario/usuario.entity";
+import { ListaInscricoesDTO } from "./dto/ListaInscricoes.dto";
 
 @Injectable()
 export class InscricaoService{
@@ -42,14 +43,29 @@ export class InscricaoService{
         }
     }
 
-    async listaInscricaos(){
+    async listaInscricoes(){
 
         try{
-            const listaDeInscricaos = await this.inscricaoRepository.find();
+            //const listaDeInscricoes = await this.inscricaoRepository.find();
             
-            //const teste = await this.inscricaoRepository.createQueryBuilder('inscricaos').select(['inscricaos.id']).getMany();*/
-           
-            return listaDeInscricaos;
+            const listaDeInscricoes = await this.inscricaoRepository.createQueryBuilder('inscricoes').
+            innerJoinAndSelect('inscricoes.usuario', 'usuarios')
+            .innerJoinAndSelect('inscricoes.vaga', 'vagas')
+            .select([
+                'inscricoes.id',
+                'inscricoes.status',
+                'inscricoes.visto',
+                'inscricoes.vagaId',
+                'inscricoes.alunoId',
+                'inscricoes.createdAt',
+                'inscricoes.updatedAt',
+                'inscricoes.deletedAt',
+                'usuarios.nome_completo',
+                'vagas.titulo',
+            ])
+            .getMany();
+            console.log(listaDeInscricoes);
+            return listaDeInscricoes;
 
         } catch (error) {
             if (error instanceof NotFoundException) {

@@ -33,7 +33,7 @@ export class UsuarioController{
 
     @Get()
     @UseGuards(AuthGuard)
-    @Roles(Role.Professor)
+    @Roles(Role.Professor, Role.Aluno)
     @ApiOperation({ summary: 'Lista todos os usuários' })
     @ApiResponse({ status: 200, description: 'Lista de usuários encontrada.', type: [ListaUsuarioDTO] })
     async listaUsuarios(){

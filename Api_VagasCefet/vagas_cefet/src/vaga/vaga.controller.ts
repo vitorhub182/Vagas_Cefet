@@ -60,8 +60,8 @@ export class VagaController{
     @UseGuards(AuthGuard)
     @Roles(Role.Professor)
     async removeVaga(@Param('id') id: string){
-        const vagaRemovido = await this.vagaService.remover(id);
-        return new DescricaoVagaDTO(vagaRemovido)
+        const vagaRemovida = await this.vagaService.remover(id);
+        return new DescricaoVagaDTO(vagaRemovida)
  
     }
 }

@@ -1,4 +1,4 @@
-import { DescricaoVagaDTO, ListaVagasDTO } from "@/dto/vagas";
+import { CriaVagaDTO, DescricaoVagaDTO, ListaVagasDTO } from "@/dto/vagas";
 
 export async function listaVagas() {
   const token = sessionStorage.getItem('access_token');
@@ -63,3 +63,37 @@ export async function listaVagas() {
       throw new Error('Falha ao se conectar com a api');
     }
     }
+
+    export async function cadastroVaga(dadosVaga: CriaVagaDTO) {
+      const token = sessionStorage.getItem('access_token');
+      if (!token){
+        throw new Error('Token não encontrado!')
+      }
+      try{
+        const response = await fetch('http://localhost:3002/vagas/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(dadosVaga),
+        });
+      
+        if (response.status == 400 ) {
+          const respostaAPI = await response.json();
+          console.log(respostaAPI.message)
+          return respostaAPI; 
+          
+        }else if (response.status == 201){
+          const dados = await response.json();
+          console.log(dados);
+          return dados;
+        }else {
+          throw new Error('Falha ao registrar vaga');
+        }
+      } catch (error){
+        console.log(dadosVaga);
+        console.log(error);
+        throw new Error('Falha ao se conectar com a api');
+      }
+      }

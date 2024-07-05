@@ -98,7 +98,7 @@ export const columns: ColumnDef<Inscricoes>[] = [
     },
   },
   {
-    accessorKey: "aluno",
+    accessorKey: "nome_aluno",
     header: ({ column }) => {
       return (
         <Button
@@ -110,10 +110,10 @@ export const columns: ColumnDef<Inscricoes>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("aluno")}</div>,
+    cell: ({ row }) => <div>{row.getValue("nome_aluno")}</div>,
   },
   {
-    accessorKey: "vaga",
+    accessorKey: "titulo_vaga",
     header: ({ column }) => {
       return (
         <Button
@@ -125,7 +125,7 @@ export const columns: ColumnDef<Inscricoes>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("vaga")}</div>,
+    cell: ({ row }) => <div>{row.getValue("titulo_vaga")}</div>,
   },
   {
     id: "actions",
@@ -170,12 +170,14 @@ export function InscricoesTable() {
   React.useEffect(() => {
     async function fetchData() {
       try {
+        /*
         if (isTeacher === false) { 
           return (toast({
             variant: 'destructive',
             title: 'Alunos não possuem autorização para acessar essa lista!'
           }))  
         }
+        */
         const inscricoesDados = await listaInscricoes();
         setData(inscricoesDados);
         return (toast({

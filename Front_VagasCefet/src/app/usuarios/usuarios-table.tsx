@@ -145,13 +145,14 @@ export function UsuariosTable() {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        
+         /*
         if (isTeacher === false) {
           return (toast({
             variant: 'destructive',
             title: 'Alunos não possuem autorização para acessar essa lista!'
           }))
         }
+        */
         const usuariosData = await listaUsuarios();
         setData(usuariosData);
         return (toast({

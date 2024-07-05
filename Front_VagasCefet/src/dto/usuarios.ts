@@ -19,11 +19,7 @@ export interface CriaUsuarioDTO {
     formacao?: string;
     exp_profissional?: string;
 }
-export interface FalhaCadastroDTO  {
-    message: string[];
-    error: string;
-    statusCode: number;
-  }
+
 
   export interface ListaUsuarioDTO {
     id: string,

@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cadastroUsuario } from "@/services/usuariosService";
-import { FalhaCadastroDTO } from "@/dto/usuarios";
+import { FalhaRegistroDTO } from "@/dto/falha";
 
 
 const FormSchema = z.object({
@@ -76,7 +76,7 @@ export default function CadastroForm() {
         })
         );
       } else {
-        const falha: FalhaCadastroDTO = resposta;
+        const falha: FalhaRegistroDTO = resposta;
         
         return (toast({
           variant: "destructive",

@@ -27,13 +27,14 @@ export class InscricaoController{
 
     @Get()
     @UseGuards(AuthGuard)
-    @Roles(Role.Professor)
+    @Roles(Role.Professor, Role.Aluno)
     async listaInscricaos(){
-        const inscricaosLista = await this.inscricaoService.listaInscricaos();
-        const inscricaosListaDTO = inscricaosLista.map(
+        const inscricoesLista = await this.inscricaoService.listaInscricoes();
+        
+        const inscricoesListaDTO = inscricoesLista.map(
             inscricao => new ListaInscricoesDTO(inscricao)
         )
-        return inscricaosListaDTO
+        return inscricoesListaDTO
     }
 
     @Get('/:id')

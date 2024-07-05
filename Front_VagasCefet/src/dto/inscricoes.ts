@@ -7,6 +7,8 @@ export interface DescricaoInscricaoDTO {
     vagaId: string;
     createdAt: string; 
     updatedAt: string; 
+    nome_aluno: string;
+    titulo_vaga:string;
 }
 
 export interface ListaInscricoesDTO {
@@ -14,4 +16,12 @@ export interface ListaInscricoesDTO {
     alunoId: string,
     vagaId: string,
     status: number,
+    nome_aluno: string,
+    titulo_vaga: string,
+}
+
+export interface CriaInscricaoDTO {
+    
+    alunoId: string;
+    vagaId: string;
 }
