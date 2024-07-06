@@ -40,8 +40,6 @@ import { listaInscricoes } from "@/services/inscricoesService"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/auth-context"
 
-
-
 export type Inscricoes = {
   id: string
   titulo: string
@@ -49,7 +47,7 @@ export type Inscricoes = {
   status: number;
 }
 
-export const columns: ColumnDef<Inscricoes>[] = [
+export const columns: (navigate: (url: string) => void) => ColumnDef<Inscricoes>[] = (navigate) => [
   {
     id: "Selecione",
     header: ({ table }) => (
@@ -77,7 +75,7 @@ export const columns: ColumnDef<Inscricoes>[] = [
     header: "Status",
     cell: ({ row }) => {
       const status: number = row.getValue("status");
-      
+
       let formattedStatus;
         switch (status) {
           case 0:
@@ -93,7 +91,7 @@ export const columns: ColumnDef<Inscricoes>[] = [
             formattedStatus =  'Desconhecido';
             break;
         };
-      
+
       return <div className="capitalize">{formattedStatus}</div>;
     },
   },
@@ -132,7 +130,6 @@ export const columns: ColumnDef<Inscricoes>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const inscricoes = row.original
-      const router = useRouter();
 
       return (
         <DropdownMenu>
@@ -148,7 +145,7 @@ export const columns: ColumnDef<Inscricoes>[] = [
               Copiar identificador da Inscrição
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push(`/inscricoes/${inscricoes.id}`)}> Detalhes da Inscrição</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate(`/inscricoes/${inscricoes.id}`)}> Detalhes da Inscrição</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -157,7 +154,7 @@ export const columns: ColumnDef<Inscricoes>[] = [
 ]
 
 export function InscricoesTable() {
-  const { isTeacher } = useAuth();
+  //const { isTeacher } = useAuth();
   const [data, setData] = React.useState<Inscricoes[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -166,23 +163,23 @@ export function InscricoesTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const hasFetchedData = React.useRef(false); 
+  const router = useRouter();
+
+  const navigate = React.useCallback((url: string) => {
+    router.push(url);
+  }, [router]);
 
   React.useEffect(() => {
     async function fetchData() {
       try {
-        /*
-        if (isTeacher === false) { 
-          return (toast({
-            variant: 'destructive',
-            title: 'Alunos não possuem autorização para acessar essa lista!'
-          }))  
-        }
-        */
+        if (hasFetchedData.current) return; 
+        hasFetchedData.current = true; 
         const inscricoesDados = await listaInscricoes();
         setData(inscricoesDados);
         return (toast({
           variant: 'default',
-          title: 'Lista de inscricoes  consultada com sucesso!'
+          title: 'Lista de inscricoes consultada com sucesso!'
         }))
       } catch (error) {
         console.error("Falha conexão com a API: ", error);
@@ -190,7 +187,6 @@ export function InscricoesTable() {
           variant: 'destructive',
           title: 'Falha ao se conectar com a API para carregar a lista!'
         }))
-        
       }
     }
 
@@ -199,7 +195,7 @@ export function InscricoesTable() {
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columns(navigate),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -221,9 +217,9 @@ export function InscricoesTable() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filtre pela Vaga..."
-          value={(table.getColumn("vaga")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("titulo_vaga")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("vaga")?.setFilterValue(event.target.value)
+            table.getColumn("titulo_vaga")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

@@ -19,7 +19,7 @@ export class AtualizaUsuarioDTO {
   @IsEmail(undefined, { message: "O 'email' informado é inválido" })
   @IsNotEmpty({ message: "Campo 'email' não pode ser vazio" })
   @IsOptional()
-  @EmailEhUnico({ message: 'E-mail já registrado' })
+  //@EmailEhUnico({ message: 'E-mail já registrado' })
   email: string;
 
   @ApiPropertyOptional({ description: "A senha do usuário", example: "senhaSegura123" })

@@ -20,8 +20,15 @@ export class InscricaoController{
     @Roles(Role.Aluno)
     @Post('/')
     async criaInscricao(@Body() dadosInscricao: CriaInscricaoDTO) {
-
         const inscricaoSalva = await this.inscricaoService.salvar(dadosInscricao);
+
+        if (inscricaoSalva === null){ 
+            return ({
+                message: "Você já está inscrito nesta vaga!",
+                statusCode : 200,
+                error : "",
+            })
+        }
         return new DescricaoInscricaoDTO(inscricaoSalva)
     }
 

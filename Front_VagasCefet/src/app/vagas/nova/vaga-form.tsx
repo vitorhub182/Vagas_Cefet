@@ -53,9 +53,6 @@ export default function VagaForm() {
   });
 
   async function onSubmit(data:DataProps) {
-    console.log(data);
-    
-    console.log(sessionStorage.getItem('access_token'))
 
     try {
 
@@ -66,6 +63,8 @@ export default function VagaForm() {
         }));
       }
       const resposta = await cadastroVaga(data);
+      console.log(resposta);
+
       if ('id' in resposta){
         form.reset();
         return (toast({

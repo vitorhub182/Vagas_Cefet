@@ -38,10 +38,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { listaVagas } from "@/services/vagasService"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { useAuth } from "@/context/auth-context"
-
-
 
 export type Vagas = {
   id: string
@@ -78,8 +75,7 @@ export const columns: ColumnDef<Vagas>[] = [
     header: "Status",
     cell: ({ row }) => {
       const status = row.getValue("status");
-      const statusKey = status;
-      const formattedStatus = statusKey === "1" ? "aberta" : "fechada";
+      const formattedStatus = status === 1 ? "aberta" : "fechada";
       return <div className="capitalize">{formattedStatus}</div>;
     },
   },
@@ -116,54 +112,59 @@ export const columns: ColumnDef<Vagas>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const vagas = row.original
-      const router = useRouter();
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir Ações</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(vagas.id)}>
-              Copiar identificador da Vaga
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push(`/vagas/${vagas.id}`)}> Detalhes da Vagas</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
+    cell: ({ row }) => <ActionCell vagas={row.original} />,
   },
   {
-    id: "actions",
+    id: "inscrever",
     enableHiding: false,
-    cell: ({ row }) => {
-      const vagas = row.original
-      const {isTeacher} = useAuth();
-      const router = useRouter()  
-
-      return (
-        <DropdownMenu>
-          {!isTeacher && (
-                      <Button
-                      className="text-center mt-3" variant={'default'}
-                      onClick={() => router.push(`/vagas/${vagas.id}`)}
-                      > Inscrever-se</Button>
-                  )}
-        </DropdownMenu>
-      )
-    },
+    cell: ({ row }) => <InscreverCell vagas={row.original} />,
   },
 ]
 
+function ActionCell({ vagas }: { vagas: Vagas }) {
+  const router = useRouter();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Abrir Ações</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Ações</DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(vagas.id)}>
+          Copiar identificador da Vaga
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => router.push(`/vagas/${vagas.id}`)}>Detalhes da Vaga</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+function InscreverCell({ vagas }: { vagas: Vagas }) {
+  const { isTeacher } = useAuth();
+  const router = useRouter();
+
+  if (isTeacher) {
+    return null;
+  }
+
+  return (
+    <Button
+      className="text-center mt-3"
+      variant={'default'}
+      onClick={() => router.push(`/vagas/${vagas.id}`)}
+    >
+      Inscrever-se
+    </Button>
+  )
+}
+
 export function VagasTable() {
-  const {isTeacher} = useAuth();
+  const { isTeacher } = useAuth();
   const router = useRouter();
   const [data, setData] = React.useState<Vagas[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -172,10 +173,13 @@ export function VagasTable() {
   )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = React.useState({});
+  const hasFetchedData = React.useRef(false); 
 
   React.useEffect(() => {
     async function fetchData() {
+      if (hasFetchedData.current) return;
+      hasFetchedData.current = true; 
       try {
         const vagasData = await listaVagas();
         setData(vagasData);
@@ -189,7 +193,6 @@ export function VagasTable() {
           variant: 'destructive',
           title: 'Falha ao se conectar com a API para carregar a lista!'
         }))
-        
       }
     }
 

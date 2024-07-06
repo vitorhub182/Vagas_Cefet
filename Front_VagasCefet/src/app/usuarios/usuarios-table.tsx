@@ -40,16 +40,16 @@ import { listaUsuarios } from "@/services/usuariosService"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/auth-context"
 
-
-
 export type Usuarios = {
   id: string
-  titulo: string
-  tipo: string
+  nome_completo: string
+  email: string
   status: number;
 }
 
-export const columns: ColumnDef<Usuarios>[] = [
+export const columns = (
+  router: ReturnType<typeof useRouter>
+): ColumnDef<Usuarios>[] => [
   {
     id: "Selecione",
     header: ({ table }) => (
@@ -74,32 +74,28 @@ export const columns: ColumnDef<Usuarios>[] = [
   },
   {
     accessorKey: "nome_completo",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Nome Completo
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Nome Completo
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => <div>{row.getValue("nome_completo")}</div>,
   },
   {
     accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          E-mail
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        E-mail
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => <div>{row.getValue("email")}</div>,
   },
   {
@@ -107,7 +103,6 @@ export const columns: ColumnDef<Usuarios>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const usuarios = row.original
-      const router = useRouter();
 
       return (
         <DropdownMenu>
@@ -123,7 +118,7 @@ export const columns: ColumnDef<Usuarios>[] = [
               Copiar identificador do Usuario
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push(`/usuarios/${usuarios.id}`)}> Detalhes do Usuarios</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push(`/usuarios/${usuarios.id}`)}> Detalhes do Usuario</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -140,12 +135,16 @@ export function UsuariosTable() {
   )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = React.useState({});
+  const hasFetchedData = React.useRef(false); 
+  const router = useRouter();
 
   React.useEffect(() => {
     async function fetchData() {
       try {
-         /*
+        if (hasFetchedData.current) return; 
+        hasFetchedData.current = true; 
+        /*
         if (isTeacher === false) {
           return (toast({
             variant: 'destructive',
@@ -174,7 +173,7 @@ export function UsuariosTable() {
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columns(router),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

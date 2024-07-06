@@ -8,8 +8,11 @@ import React from 'react';
 export default function UsuarioPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const [data, setData] = React.useState<DescricaoUsuarioDTO>();
+  const hasFetchedData = React.useRef(false); 
   React.useEffect(() => {
     async function fetchData() {
+      if (hasFetchedData.current) return; 
+      hasFetchedData.current = true; 
       try {
         const usuario = await descricaoUsuario(id);
         setData(usuario);

@@ -65,11 +65,7 @@ const items: ISidebarItem[] = [
     icon: LockKeyhole,
     items: [
       {
-        name: "Alterar senha",
-        path: "/settings/security",
-      },
-      {
-        name: "Atualizar Currículo",
+        name: "Meu Perfil",
         path: "/settings/curriculum",
       },
     ],

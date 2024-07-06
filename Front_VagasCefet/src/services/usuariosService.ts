@@ -1,4 +1,4 @@
-import { CriaUsuarioDTO, DescricaoUsuarioDTO, ListaUsuarioDTO } from "@/dto/usuarios";
+import { AtualizaUsuarioDTO,CriaUsuarioDTO, DescricaoUsuarioDTO, ListaUsuarioDTO } from "@/dto/usuarios";
 
 export async function cadastroUsuario(dadosUsuario: CriaUsuarioDTO) {
 
@@ -92,3 +92,43 @@ export async function cadastroUsuario(dadosUsuario: CriaUsuarioDTO) {
         throw new Error('Falha ao se conectar com a api');
       }
       }
+
+      export async function atualizaUsuario(dadosUsuario: AtualizaUsuarioDTO) {
+        const identificador = dadosUsuario.id;
+        const { id, ...dados } = dadosUsuario;
+
+        console.log(identificador);
+        console.log(dados);
+
+        const token = sessionStorage.getItem('access_token');
+        try{
+          if (!token){
+            throw new Error('Token não encontrado!')
+          }
+          const response = await fetch(`http://localhost:3002/usuarios/${identificador}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+
+            },
+            body: JSON.stringify(dados),
+          });
+        
+          if (response.status == 400 ) {
+            const respostaAPI = await response.json();
+            console.log(respostaAPI.message)
+            return respostaAPI; 
+            
+          }else if (response.status == 201 || 200){
+            const dados = await response.json();
+            console.log(dados);
+            return dados;
+          }else {
+            throw new Error('Falha ao atualizar usuario');
+          }
+        } catch (error){
+          console.log(error);
+          throw new Error('Falha ao se conectar com a api');
+        }
+        }

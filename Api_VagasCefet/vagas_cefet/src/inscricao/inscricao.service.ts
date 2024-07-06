@@ -80,7 +80,15 @@ export class InscricaoService{
         try{
             const aluno = await this.usuarioRepository.findOne({where: {id: dadosInscricao.alunoId}})
             const vaga =  await this.vagaRepository.findOne({where: {id: dadosInscricao.vagaId}})
-            if (!vaga){ throw new NotFoundException }
+
+            const inscricao = await this.inscricaoRepository.findOne({ where: {
+                alunoId: dadosInscricao.alunoId,
+                vagaId: dadosInscricao.vagaId,
+            }
+            })
+            if (!vaga || !aluno){ throw new NotFoundException }
+            console.log(inscricao)
+            if (inscricao !== null ) { return null}
 
             const inscricaoNova = new InscricaoEntity;
 

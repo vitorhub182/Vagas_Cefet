@@ -21,7 +21,6 @@ export async function listaVagas() {
 
     }else if (response.status == 200){
       const dados: ListaVagasDTO = await response.json();
-      console.log(dados);
       return dados;
     }else {
       throw new Error('Falha ao listar vaga');
@@ -53,7 +52,6 @@ export async function listaVagas() {
   
       }else if (response.status == 200){
         const dados: DescricaoVagaDTO = await response.json();
-        console.log(dados);
         return dados;
       }else {
         throw new Error('Falha ao apresentar descrição de vagas');
@@ -79,21 +77,51 @@ export async function listaVagas() {
           body: JSON.stringify(dadosVaga),
         });
       
-        if (response.status == 400 ) {
+        if (response.status == 400  ) {
           const respostaAPI = await response.json();
-          console.log(respostaAPI.message)
+
           return respostaAPI; 
           
         }else if (response.status == 201){
           const dados = await response.json();
-          console.log(dados);
+
           return dados;
         }else {
           throw new Error('Falha ao registrar vaga');
         }
       } catch (error){
-        console.log(dadosVaga);
         console.log(error);
         throw new Error('Falha ao se conectar com a api');
       }
       }
+
+
+      export async function deletarVaga(id: string) {
+        const token = sessionStorage.getItem('access_token');
+        if (!token){
+          throw new Error('Token não encontrado!')
+        }
+        try{
+          const response = await fetch(`http://localhost:3002/vagas/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+          });
+        
+          if (response.status == 404  ) {
+            const respostaAPI = await response.json();
+            return respostaAPI; 
+            
+          }else if (response.status == 200 ){
+            const dados = await response.json();
+            return dados;
+          }else {
+            throw new Error('Falha ao deletar vaga');
+          }
+        } catch (error){
+          console.log(error);
+          throw new Error('Falha ao se conectar com a api');
+        }
+        }

@@ -4,27 +4,23 @@ import { toast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { CriaInscricaoDTO } from '@/dto/inscricoes';
 import { DescricaoVagaDTO } from '@/dto/vagas';
+
 import { cadastroInscricao } from '@/services/inscricoesService';
-import { descricaoVaga } from '@/services/vagasService';
+import { descricaoVaga, deletarVaga } from '@/services/vagasService';
 import React from 'react';
 
 
 export default function VagaPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const [data, setData] = React.useState<DescricaoVagaDTO>();
-  const alunoId = sessionStorage.getItem('id') || '';
-  
-  const dadosCriaInscricao: CriaInscricaoDTO = {
-    alunoId: alunoId,
-    vagaId: id,
-  }
+  const hasFetchedData = React.useRef(false); 
   const {isTeacher} = useAuth();
 
-
-
-
   React.useEffect(() => {
+
     async function fetchData() {
+      if (hasFetchedData.current) return; 
+      hasFetchedData.current = true; 
       try {
         const vaga = await descricaoVaga(id);
         setData(vaga);
@@ -44,6 +40,12 @@ export default function VagaPage({ params }: { params: { id: string } }) {
     
   }, []);
   async function inscricao() {
+    const alunoId = sessionStorage.getItem('id') || '';
+    const dadosCriaInscricao: CriaInscricaoDTO = {
+      alunoId: alunoId,
+      vagaId: id,
+    }
+
     try {
       if (isTeacher === true) { 
         return (toast({
@@ -52,17 +54,81 @@ export default function VagaPage({ params }: { params: { id: string } }) {
         }))  
       }
 
-      await cadastroInscricao(dadosCriaInscricao);
-
-      return (toast({
-        variant: 'default',
-        title: 'Inscrição feita com sucesso!'
-      }))
+      const resposta = await cadastroInscricao(dadosCriaInscricao);
+      
+      if ('message' in resposta){
+        return (toast({
+          variant: "destructive",
+          title: "Você já está inscrito nesta vaga!",
+          description: 'Aguarde seu resultado!'
+        }));
+      }
+      else if ('id' in resposta){
+        
+        return (toast({
+          variant: 'default',
+          title: "Inscrição criada com sucesso!",
+          description: "Obrigado!",
+        })
+        );
+      }else {
+        return (toast({
+          variant: 'destructive',
+          title: "Falha durante a inscrição!",
+          description: "Consulte o suporte técnico!",
+        })
+        );
+      }
     } catch (error) {
       console.error("Falha conexão com a API: ", error);
       return (toast({
         variant: 'destructive',
         title: 'Falha ao se conectar com a API para executar a inscrição!'
+      }))
+      
+    }
+  }
+  async function delecao() {
+    
+    try {
+      if (isTeacher === false) { 
+        return (toast({
+          variant: 'destructive',
+          title: 'Aluno não pode deletar uma vaga!'
+        }))  
+      }
+
+      const resposta = await deletarVaga(id);
+      
+      if ('message' in resposta){
+        if (resposta.statusCode === 404){
+        return (toast({
+          variant: "destructive",
+          title: "Vaga já deletada ou inexistente!",
+        }));
+      }
+      }
+      else if ('id' in resposta){
+        
+        return (toast({
+          variant: 'default',
+          title: "Vaga deletada com sucesso!",
+        })
+
+        );
+      }else {
+        return (toast({
+          variant: 'destructive',
+          title: "Falha durante a deleção!",
+          description: "Consulte o suporte técnico!",
+        })
+        );
+      }
+    } catch (error) {
+      console.error("Falha conexão com a API: ", error);
+      return (toast({
+        variant: 'destructive',
+        title: 'Falha ao se conectar com a API para executar a deleção!'
       }))
       
     }
@@ -104,6 +170,12 @@ export default function VagaPage({ params }: { params: { id: string } }) {
                       onClick={() => (inscricao())}
                       > Inscrever-se</Button>
                   )}
+      {isTeacher && (
+                      <Button
+                      className="text-center mt-3" variant={'destructive'}
+                      onClick={() => (delecao())}
+                      > Deletar esta vaga</Button>
+      )}
       </div>
     </div>
   );

@@ -97,8 +97,18 @@ export class UsuarioService{
     async atualiza(id:string, dadosDeAtualizacao: Partial<UsuarioEntity> /*Recebo parcialmente o usuarioEntity*/){
 
         try {
+            console.log(dadosDeAtualizacao)
             await  this.buscaPorId(id);
-
+            if (dadosDeAtualizacao.senha){
+                const password = this.configService.get<string>('ENCRIPT');
+                const iv = randomBytes(16);
+                const key = (await promisify(scrypt)(password, 'salt', 32)) as Buffer;
+                const cipher = createCipheriv('aes-256-ctr', key, iv);
+                const senhaEncrypted = Buffer.concat([cipher.update(dadosDeAtualizacao.senha),cipher.final(),]);
+                const ivBase64 = iv.toString('base64');
+                const encryptedBase64 = senhaEncrypted.toString('base64');
+                dadosDeAtualizacao.senha = `${ivBase64}:${encryptedBase64}`;
+            }
             await this.usuarioRepository.update(id, dadosDeAtualizacao);
             return this.buscaPorId(id);
         } catch (error) {

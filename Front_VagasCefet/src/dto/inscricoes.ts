@@ -25,3 +25,8 @@ export interface CriaInscricaoDTO {
     alunoId: string;
     vagaId: string;
 }
+
+export interface AtualizaInscricaoDTO { 
+    visto: boolean;
+    status: number;
+}
