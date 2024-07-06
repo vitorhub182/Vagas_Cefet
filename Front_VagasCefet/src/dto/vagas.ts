@@ -27,3 +27,13 @@ export interface CriaVagaDTO {
     status: number;
     professorId: string;
 }
+
+export interface AtualizaVagaDTO {
+    id: string;
+    titulo?: string;    
+    contratante?: string;
+    tipo?: string;
+    requisitos?: string;
+    detalhes?: string;
+    status?: number;
+}

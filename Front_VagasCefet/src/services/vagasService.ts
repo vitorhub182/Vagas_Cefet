@@ -1,4 +1,4 @@
-import { CriaVagaDTO, DescricaoVagaDTO, ListaVagasDTO } from "@/dto/vagas";
+import { AtualizaVagaDTO, CriaVagaDTO, DescricaoVagaDTO, ListaVagasDTO } from "@/dto/vagas";
 
 export async function listaVagas() {
   const token = sessionStorage.getItem('access_token');
@@ -95,6 +95,42 @@ export async function listaVagas() {
       }
       }
 
+      export async function atualizarVaga(dadosVaga: AtualizaVagaDTO) {
+
+        const identificador = dadosVaga.id;
+        const { id, ...dados } = dadosVaga;
+
+        const token = sessionStorage.getItem('access_token');
+        if (!token){
+          throw new Error('Token não encontrado!')
+        }
+        try{
+          const response = await fetch(`http://localhost:3002/vagas/${identificador}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(dados),
+          });
+        
+          if (response.status == 400  ) {
+            const respostaAPI = await response.json();
+  
+            return respostaAPI; 
+            
+          }else if (response.status == 201 || 200){
+            const dados = await response.json();
+  
+            return dados;
+          }else {
+            throw new Error('Falha ao atualizar vaga');
+          }
+        } catch (error){
+          console.log(error);
+          throw new Error('Falha ao se conectar com a api');
+        }
+        }
 
       export async function deletarVaga(id: string) {
         const token = sessionStorage.getItem('access_token');

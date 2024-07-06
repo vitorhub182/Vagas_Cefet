@@ -2,12 +2,11 @@
 import * as React from "react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import {
   Form,
@@ -54,11 +53,12 @@ export default function AtualizaUsuarioForm() {
       formacao: '',
       exp_profissional: ''
     });
+
+  const [shouldFetchData, setShouldFetchData] = React.useState(true);
   
   React.useEffect(() => {
     async function fetchData() {
-      if (hasFetchedData.current) return; 
-      hasFetchedData.current = true; 
+      if (!shouldFetchData) return;
       try {
         const usuarioId = sessionStorage.getItem('id');
         if (usuarioId) {
@@ -85,6 +85,7 @@ export default function AtualizaUsuarioForm() {
             title: 'Usuário não encontrado no banco de dados!'
           });
         }
+        setShouldFetchData(false);
       } catch (error) {
         console.error("Falha conexão com a API: ", error);
         toast({
@@ -95,7 +96,7 @@ export default function AtualizaUsuarioForm() {
     }
 
     fetchData();
-  }, []);
+  }, [shouldFetchData]);
 
   const form = useForm<DataProps>({
     mode: 'onBlur',
@@ -120,13 +121,12 @@ export default function AtualizaUsuarioForm() {
     formDataPass = formData;
     }
 
-    try {
-      console.log(formDataPass)
-      
+    try {      
       const resposta = await atualizaUsuario(formDataPass);
 
       if ('id' in resposta){
         form.reset();
+        setShouldFetchData(true);
         return (toast({
           title: "Usuário atualizado com sucesso!"
         })

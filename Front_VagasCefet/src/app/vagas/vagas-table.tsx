@@ -138,7 +138,7 @@ function ActionCell({ vagas }: { vagas: Vagas }) {
           Copiar identificador da Vaga
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push(`/vagas/${vagas.id}`)}>Detalhes da Vaga</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push(`/vagas/${vagas.id}/`)}>Detalhes da Vaga</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -149,14 +149,22 @@ function InscreverCell({ vagas }: { vagas: Vagas }) {
   const router = useRouter();
 
   if (isTeacher) {
-    return null;
+    return (
+      <Button
+        className="text-center mt-3"
+        variant={'default'}
+        onClick={() => router.push(`/vagas/${vagas.id}/atualiza/`)}
+      >
+        Atualizar
+      </Button>
+    )
   }
 
   return (
     <Button
       className="text-center mt-3"
       variant={'default'}
-      onClick={() => router.push(`/vagas/${vagas.id}`)}
+      onClick={() => router.push(`/vagas/${vagas.id}/`)}
     >
       Inscrever-se
     </Button>
@@ -239,7 +247,7 @@ export function VagasTable() {
           <DropdownMenuTrigger asChild>
           
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
+              Colunas <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
             
           </DropdownMenuTrigger>
@@ -319,8 +327,8 @@ export function VagasTable() {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} de{" "}
+          {table.getFilteredRowModel().rows.length} linha(s) selecionada(s).
         </div>
         <div className="space-x-2">
           <Button
@@ -329,7 +337,7 @@ export function VagasTable() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             variant="outline"
@@ -337,7 +345,7 @@ export function VagasTable() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Próximo
           </Button>
         </div>
       </div>

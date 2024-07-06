@@ -96,10 +96,7 @@ export async function cadastroUsuario(dadosUsuario: CriaUsuarioDTO) {
       export async function atualizaUsuario(dadosUsuario: AtualizaUsuarioDTO) {
         const identificador = dadosUsuario.id;
         const { id, ...dados } = dadosUsuario;
-
-        console.log(identificador);
-        console.log(dados);
-
+        
         const token = sessionStorage.getItem('access_token');
         try{
           if (!token){

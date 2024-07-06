@@ -89,15 +89,13 @@ export default function VagaPage({ params }: { params: { id: string } }) {
     }
   }
   async function delecao() {
-    
+    if (isTeacher === false) { 
+      return (toast({
+        variant: 'destructive',
+        title: 'Aluno não pode deletar uma vaga!'
+      }))  
+    }
     try {
-      if (isTeacher === false) { 
-        return (toast({
-          variant: 'destructive',
-          title: 'Aluno não pode deletar uma vaga!'
-        }))  
-      }
-
       const resposta = await deletarVaga(id);
       
       if ('message' in resposta){
