@@ -154,7 +154,6 @@ export const columns: (navigate: (url: string) => void) => ColumnDef<Inscricoes>
 ]
 
 export function InscricoesTable() {
-  //const { isTeacher } = useAuth();
   const [data, setData] = React.useState<Inscricoes[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(

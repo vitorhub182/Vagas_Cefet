@@ -17,7 +17,6 @@ import { useAuth } from '@/context/auth-context';
 export default function InscricaoPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const [data, setData] = React.useState<DescricaoInscricaoDTO>();
-  const [status, setStatus] = React.useState<number | undefined>();
   
   const hasFetchedData = React.useRef(false);
   const {isTeacher} = useAuth();
@@ -59,7 +58,6 @@ export default function InscricaoPage({ params }: { params: { id: string } }) {
 
   const handleStatusChange = async (value: string) => {
     const updatedStatus = parseInt(value, 10);
-    setStatus(updatedStatus);
 
     const updateData: AtualizaInscricaoDTO = {
       visto: true,

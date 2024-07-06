@@ -107,14 +107,11 @@ export default function VagaPage({ params }: { params: { id: string } }) {
           title: "Vaga já deletada ou inexistente!",
         }));
       }
-      }
-      else if ('id' in resposta){
-        
+      }else if ('id' in resposta){
         return (toast({
           variant: 'default',
           title: "Vaga deletada com sucesso!",
         })
-
         );
       }else {
         return (toast({
